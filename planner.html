@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Планировщик задач</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+    background: #f4f5f7;
+    color: #1f2933;
+    margin: 0;
+    padding: 24px 16px;
+  }
+  main { max-width: 720px; margin: 0 auto; }
+  h1 { margin: 0 0 20px; font-size: 28px; }
+  form { display: flex; gap: 8px; }
+  input[type="text"] {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #cbd2d9;
+    border-radius: 8px;
+    font-size: 15px;
+  }
+  button {
+    padding: 8px 14px;
+    border: none;
+    border-radius: 8px;
+    background: #3b6ef5;
+    color: #fff;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button:hover { background: #2a58d8; }
+  button.secondary { background: #e4e7eb; color: #323f4b; }
+  button.secondary:hover { background: #cbd2d9; }
+  button.danger { background: #fde8e8; color: #b42318; }
+  button.danger:hover { background: #f9c9c9; }
+  .section {
+    background: #fff;
+    border-radius: 12px;
+    padding: 16px;
+    margin-top: 16px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  }
+  .sec-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+  .sec-head h2 { flex: 1; margin: 0; font-size: 20px; }
+  ul { list-style: none; margin: 0 0 12px; padding: 0; }
+  li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    border-bottom: 1px solid #eef0f2;
+  }
+  li span { flex: 1; word-break: break-word; }
+  li.done span { text-decoration: line-through; color: #9aa5b1; }
+  .empty { color: #7b8794; text-align: center; margin-top: 32px; }
+</style>
+</head>
+<body>
+<main>
+  <p><a href="index.html">← На главную</a></p>
+  <h1>Планировщик задач</h1>
+
+  <form id="section-form">
+    <input type="text" id="section-input" placeholder="Новый раздел, например «Работа»" required>
+    <button type="submit">Добавить раздел</button>
+  </form>
+
+  <div id="sections"></div>
+</main>
+
+<script>
+  const KEY = "planner-v1";
+  let state = load();
+
+  function load() {
+    try {
+      const data = JSON.parse(localStorage.getItem(KEY));
+      if (data && Array.isArray(data.sections)) return data;
+    } catch (e) {}
+    return { sections: [] };
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(KEY, JSON.stringify(state));
+    } catch (e) {}
+  }
+
+  function commit() {
+    save();
+    render();
+  }
+
+  function uid() {
+    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+  }
+
+  function el(tag, props, ...children) {
+    const node = document.createElement(tag);
+    Object.assign(node, props || {});
+    children.forEach(c => node.append(c));
+    return node;
+  }
+
+  function button(text, onClick, cls) {
+    return el("button", { type: "button", textContent: text, className: cls || "secondary", onclick: onClick });
+  }
+
+  function render() {
+    const root = document.getElementById("sections");
+    root.replaceChildren();
+
+    if (!state.sections.length) {
+      root.append(el("p", { className: "empty", textContent: "Пока нет разделов. Добавьте первый." }));
+      return;
+    }
+
+    state.sections.forEach(sec => {
+      const head = el("div", { className: "sec-head" },
+        el("h2", { textContent: sec.title }),
+        button("Переименовать", () => {
+          const title = prompt("Название раздела", sec.title);
+          if (title && title.trim()) {
+            sec.title = title.trim();
+            commit();
+          }
+        }),
+        button("Удалить", () => {
+          if (confirm("Удалить раздел «" + sec.title + "» со всеми задачами?")) {
+            state.sections = state.sections.filter(s => s.id !== sec.id);
+            commit();
+          }
+        }, "danger")
+      );
+
+      const list = el("ul");
+      sec.tasks.forEach(task => {
+        const checkbox = el("input", { type: "checkbox", checked: task.done });
+        checkbox.onchange = () => {
+          task.done = checkbox.checked;
+          commit();
+        };
+        const item = el("li", { className: task.done ? "done" : "" },
+          checkbox,
+          el("span", { textContent: task.text }),
+          button("Изменить", () => {
+            const text = prompt("Текст задачи", task.text);
+            if (text && text.trim()) {
+              task.text = text.trim();
+              commit();
+            }
+          }),
+          button("Удалить", () => {
+            sec.tasks = sec.tasks.filter(t => t.id !== task.id);
+            commit();
+          }, "danger")
+        );
+        list.append(item);
+      });
+
+      const input = el("input", { type: "text", placeholder: "Новая задача", required: true });
+      const form = el("form", {},
+        input,
+        el("button", { type: "submit", textContent: "Добавить" })
+      );
+      form.onsubmit = e => {
+        e.preventDefault();
+        const text = input.value.trim();
+        if (!text) return;
+        sec.tasks.push({ id: uid(), text: text, done: false });
+        commit();
+      };
+
+      root.append(el("section", { className: "section" }, head, list, form));
+    });
+  }
+
+  document.getElementById("section-form").onsubmit = e => {
+    e.preventDefault();
+    const input = document.getElementById("section-input");
+    const title = input.value.trim();
+    if (!title) return;
+    state.sections.push({ id: uid(), title: title, tasks: [] });
+    input.value = "";
+    commit();
+  };
+
+  render();
+</script>
+</body>
+</html>

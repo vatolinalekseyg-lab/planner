@@ -4,191 +4,195 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Планировщик задач</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; }
+  :root {
+    --ink: #24323a;
+    --muted: #5d6b73;
+    --brand-1: #3f7a7c;
+    --brand-2: #5b6fb5;
+    --line: rgba(60, 90, 100, 0.12);
+    --glass: rgba(255, 255, 255, 0.62);
+    --glass-strong: rgba(255, 255, 255, 0.85);
+    --base-bg: linear-gradient(160deg, #f1f7f4 0%, #edf1fa 55%, #f8f3ee 100%);
+    --blob-1: rgba(133, 190, 172, 0.45);
+    --blob-2: rgba(140, 160, 225, 0.38);
+    --title-grad: linear-gradient(110deg, #2c5a5e 0%, #44609f 100%);
+  }
+  [data-bs-theme="dark"] {
+    --ink: #e8eef0;
+    --muted: #9fb0b8;
+    --brand-1: #4a8c8e;
+    --brand-2: #6b80c7;
+    --line: rgba(255, 255, 255, 0.10);
+    --glass: rgba(255, 255, 255, 0.05);
+    --glass-strong: rgba(20, 28, 32, 0.75);
+    --base-bg: linear-gradient(160deg, #121a1d 0%, #151a26 60%, #1a1a1f 100%);
+    --blob-1: rgba(70, 140, 130, 0.28);
+    --blob-2: rgba(90, 110, 190, 0.26);
+    --title-grad: linear-gradient(110deg, #9fd3c4 0%, #a9b9f0 100%);
+  }
+
   body {
-    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
-    background: #f4f5f7;
-    color: #1f2933;
-    margin: 0;
-    padding: 24px 16px;
+    font-family: "Manrope", system-ui, -apple-system, "Segoe UI", sans-serif;
+    color: var(--ink);
+    /* Цветные «пятна» — радиальные градиенты, плавно уходящие в прозрачность, поэтому резких границ нет */
+    background:
+      radial-gradient(70vmax 55vmax at 0% 0%, var(--blob-1), transparent 70%),
+      radial-gradient(65vmax 55vmax at 100% 35%, var(--blob-2), transparent 70%),
+      var(--base-bg);
+    background-repeat: no-repeat;
   }
-  main { max-width: 720px; margin: 0 auto; }
-  h1 { margin: 0 0 20px; font-size: 28px; }
-  form { display: flex; gap: 8px; }
-  input[type="text"] {
-    flex: 1;
-    padding: 10px 12px;
-    border: 1px solid #cbd2d9;
-    border-radius: 8px;
-    font-size: 15px;
+
+  /* ---------- Шапка ---------- */
+  .site-header {
+    background: var(--glass-strong);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
   }
-  button {
-    padding: 8px 14px;
-    border: none;
-    border-radius: 8px;
-    background: #3b6ef5;
-    color: #fff;
-    font-size: 14px;
-    cursor: pointer;
+  .site-header .nav-link { color: var(--muted); font-weight: 500; border-radius: 8px; transition: color .15s ease, background .15s ease; }
+  .site-header .nav-link:hover { color: var(--ink); background: var(--glass); }
+  .brand { font-weight: 800; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
+  .brand::before {
+    content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
   }
-  button:hover { background: #2a58d8; }
-  button.secondary { background: #e4e7eb; color: #323f4b; }
-  button.secondary:hover { background: #cbd2d9; }
-  button.danger { background: #fde8e8; color: #b42318; }
-  button.danger:hover { background: #f9c9c9; }
-  .section {
-    background: #fff;
-    border-radius: 12px;
-    padding: 16px;
-    margin-top: 16px;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+
+  /* ---------- Кнопки ---------- */
+  .btn-brand {
+    color: #fff; border: none;
+    background: linear-gradient(135deg, var(--brand-1) 0%, var(--brand-2) 100%);
+    box-shadow: 0 10px 24px -10px rgba(63, 122, 124, 0.65);
+    transition: transform .15s ease, box-shadow .15s ease, filter .15s ease;
   }
-  .sec-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-  .sec-head h2 { flex: 1; margin: 0; font-size: 20px; }
-  ul { list-style: none; margin: 0 0 12px; padding: 0; }
-  li {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 8px 0;
-    border-bottom: 1px solid #eef0f2;
+  .btn-brand:hover, .btn-brand:focus-visible { color: #fff; transform: translateY(-2px); filter: brightness(1.06); box-shadow: 0 14px 28px -10px rgba(63, 122, 124, 0.75); }
+  .btn-ghost { color: var(--ink); background: var(--glass); border: 1px solid var(--line); font-weight: 600; transition: background .15s ease, border-color .15s ease; }
+  .btn-ghost:hover { color: var(--ink); background: var(--glass-strong); border-color: var(--brand-1); }
+
+  /* ---------- Главный экран ---------- */
+  .hero { padding: 96px 0 64px; }
+  .pill {
+    display: inline-block; padding: 6px 14px; margin-bottom: 20px; font-size: 0.85rem; font-weight: 600;
+    color: var(--brand-1); background: var(--glass); border: 1px solid var(--line); border-radius: 999px;
   }
-  li span { flex: 1; word-break: break-word; }
-  li.done span { text-decoration: line-through; color: #9aa5b1; }
-  .empty { color: #7b8794; text-align: center; margin-top: 32px; }
+  [data-bs-theme="dark"] .pill { color: #9fd3c4; }
+  .hero h1 { font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; background: var(--title-grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero .lead { color: var(--muted); font-weight: 400; }
+
+  /* ---------- Превью планировщика ---------- */
+  .block { padding: 24px 0 72px; }
+  .demo {
+    max-width: 880px; margin: 0 auto;
+    background: var(--glass-strong); border: 1px solid var(--line); border-radius: 24px;
+    box-shadow: 0 30px 60px -30px rgba(40, 70, 90, 0.45); overflow: hidden;
+  }
+  .demo-bar { display: flex; align-items: center; gap: 7px; padding: 14px 18px; border-bottom: 1px solid var(--line); background: var(--glass); }
+  .demo-bar .dot { width: 11px; height: 11px; border-radius: 50%; background: rgba(120, 140, 150, 0.35); }
+  .demo-bar .label { margin-left: 10px; font-size: .8rem; color: var(--muted); font-weight: 600; }
+  .demo-body { padding: 24px; }
+  .demo-section { height: 100%; background: var(--glass); border: 1px solid var(--line); border-radius: 16px; padding: 18px 20px; }
+  .demo-section h3 { font-size: 1.05rem; font-weight: 700; margin: 0; }
+  .demo-section .count { font-size: .8rem; color: var(--muted); font-weight: 600; }
+  .task { display: flex; align-items: center; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .task input { width: 18px; height: 18px; accent-color: var(--brand-1); flex-shrink: 0; cursor: pointer; }
+  .task label { flex: 1; cursor: pointer; }
+  .task input:checked + label { text-decoration: line-through; color: var(--muted); }
+  .add-row { margin-top: 14px; padding: 10px 14px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); font-size: .9rem; }
+  .demo-hint { text-align: center; margin-top: 16px; font-size: .85rem; color: var(--muted); }
+
+  footer { border-top: 1px solid var(--line); color: var(--muted); }
 </style>
+<script>
+  // Тема под настройки системы (светлая/тёмная)
+  (function () {
+    var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    document.documentElement.setAttribute("data-bs-theme", dark ? "dark" : "light");
+  })();
+</script>
 </head>
-<body>
-<main>
-  <h1>Планировщик задач</h1>
+<body class="d-flex flex-column min-vh-100">
 
-  <form id="section-form">
-    <input type="text" id="section-input" placeholder="Новый раздел, например «Работа»" required>
-    <button type="submit">Добавить раздел</button>
-  </form>
+<!-- Шапка: слева разделы (треть ширины), по центру название, справа вход -->
+<header class="site-header sticky-top">
+  <div class="container py-3">
+    <div class="row align-items-center gy-2">
+      <nav class="col-12 col-lg-4">
+        <ul class="nav">
+          <li class="nav-item"><a class="nav-link px-3" href="#">Блог</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="#">О нас</a></li>
+          <li class="nav-item"><a class="nav-link px-3" href="#">Инструкции</a></li>
+        </ul>
+      </nav>
+      <div class="col-6 col-lg-4 text-lg-center">
+        <a class="brand fs-5" href="index.html">Планировщик</a>
+      </div>
+      <div class="col-6 col-lg-4 text-end">
+        <a class="btn btn-ghost px-4" href="#">Войти</a>
+      </div>
+    </div>
+  </div>
+</header>
 
-  <div id="sections"></div>
+<main class="flex-grow-1">
+  <!-- Главный экран -->
+  <section class="hero text-center">
+    <div class="container">
+      <span class="pill">Простой планировщик задач</span>
+      <h1 class="display-4 mb-3">Планируйте дела<br>без хаоса</h1>
+      <p class="lead mx-auto mb-4" style="max-width: 560px;">
+        Разделы, задачи и галочки «готово» в одном месте. С этого легко начать, и ничего лишнего.
+      </p>
+      <a class="btn btn-brand btn-lg px-5 py-3 fw-semibold rounded-pill" href="planner.html">Начать планирование</a>
+    </div>
+  </section>
+
+  <!-- Превью планировщика -->
+  <section class="block">
+    <div class="container">
+      <div class="demo">
+        <div class="demo-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+          <span class="label">Мой планировщик</span>
+        </div>
+        <div class="demo-body">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <div class="demo-section">
+                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                  <h3>Работа</h3><span class="count">1 из 3</span>
+                </div>
+                <div class="task"><input type="checkbox" id="a1" checked><label for="a1">Подготовить отчёт за неделю</label></div>
+                <div class="task"><input type="checkbox" id="a2"><label for="a2">Созвониться с командой</label></div>
+                <div class="task"><input type="checkbox" id="a3"><label for="a3">Обновить презентацию</label></div>
+                <div class="add-row">+ Новая задача</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="demo-section">
+                <div class="d-flex justify-content-between align-items-baseline mb-2">
+                  <h3>Дом</h3><span class="count">1 из 3</span>
+                </div>
+                <div class="task"><input type="checkbox" id="b1" checked><label for="b1">Купить продукты</label></div>
+                <div class="task"><input type="checkbox" id="b2"><label for="b2">Заказать фильтр для воды</label></div>
+                <div class="task"><input type="checkbox" id="b3"><label for="b3">Разобрать шкаф</label></div>
+                <div class="add-row">+ Новая задача</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <p class="demo-hint">Попробуйте: галочки можно ставить прямо здесь.</p>
+    </div>
+  </section>
 </main>
 
-<script>
-  const KEY = "planner-v1";
-  let state = load();
+<footer class="py-4 mt-auto">
+  <div class="container text-center small">© 2026 Планировщик задач</div>
+</footer>
 
-  function load() {
-    try {
-      const data = JSON.parse(localStorage.getItem(KEY));
-      if (data && Array.isArray(data.sections)) return data;
-    } catch (e) {}
-    return { sections: [] };
-  }
-
-  function save() {
-    try {
-      localStorage.setItem(KEY, JSON.stringify(state));
-    } catch (e) {}
-  }
-
-  function commit() {
-    save();
-    render();
-  }
-
-  function uid() {
-    return Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
-  }
-
-  function el(tag, props, ...children) {
-    const node = document.createElement(tag);
-    Object.assign(node, props || {});
-    children.forEach(c => node.append(c));
-    return node;
-  }
-
-  function button(text, onClick, cls) {
-    return el("button", { type: "button", textContent: text, className: cls || "secondary", onclick: onClick });
-  }
-
-  function render() {
-    const root = document.getElementById("sections");
-    root.replaceChildren();
-
-    if (!state.sections.length) {
-      root.append(el("p", { className: "empty", textContent: "Пока нет разделов. Добавьте первый." }));
-      return;
-    }
-
-    state.sections.forEach(sec => {
-      const head = el("div", { className: "sec-head" },
-        el("h2", { textContent: sec.title }),
-        button("Переименовать", () => {
-          const title = prompt("Название раздела", sec.title);
-          if (title && title.trim()) {
-            sec.title = title.trim();
-            commit();
-          }
-        }),
-        button("Удалить", () => {
-          if (confirm("Удалить раздел «" + sec.title + "» со всеми задачами?")) {
-            state.sections = state.sections.filter(s => s.id !== sec.id);
-            commit();
-          }
-        }, "danger")
-      );
-
-      const list = el("ul");
-      sec.tasks.forEach(task => {
-        const checkbox = el("input", { type: "checkbox", checked: task.done });
-        checkbox.onchange = () => {
-          task.done = checkbox.checked;
-          commit();
-        };
-        const item = el("li", { className: task.done ? "done" : "" },
-          checkbox,
-          el("span", { textContent: task.text }),
-          button("Изменить", () => {
-            const text = prompt("Текст задачи", task.text);
-            if (text && text.trim()) {
-              task.text = text.trim();
-              commit();
-            }
-          }),
-          button("Удалить", () => {
-            sec.tasks = sec.tasks.filter(t => t.id !== task.id);
-            commit();
-          }, "danger")
-        );
-        list.append(item);
-      });
-
-      const input = el("input", { type: "text", placeholder: "Новая задача", required: true });
-      const form = el("form", {},
-        input,
-        el("button", { type: "submit", textContent: "Добавить" })
-      );
-      form.onsubmit = e => {
-        e.preventDefault();
-        const text = input.value.trim();
-        if (!text) return;
-        sec.tasks.push({ id: uid(), text: text, done: false });
-        commit();
-      };
-
-      root.append(el("section", { className: "section" }, head, list, form));
-    });
-  }
-
-  document.getElementById("section-form").onsubmit = e => {
-    e.preventDefault();
-    const input = document.getElementById("section-input");
-    const title = input.value.trim();
-    if (!title) return;
-    state.sections.push({ id: uid(), title: title, tasks: [] });
-    input.value = "";
-    commit();
-  };
-
-  render();
-</script>
 </body>
 </html>
