@@ -93,7 +93,8 @@
     font: inherit; font-weight: 600; line-height: 1.4; cursor: pointer; text-decoration: none;
     transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, background .15s ease, border-color .15s ease;
   }
-  .btn:focus-visible, .icon-btn:focus-visible, .field:focus-visible, .check:focus-visible {
+  .btn:focus-visible, .icon-btn:focus-visible, .field:focus-visible, .check:focus-visible,
+  .seg button:focus-visible, .task-title:focus-visible {
     outline: 2px solid var(--brand-2); outline-offset: 2px;
   }
   .btn-brand {
@@ -106,6 +107,8 @@
   .btn-ghost:hover { color: var(--ink); background: var(--glass-strong); border-color: var(--brand-1); }
   .btn-danger-solid { color: #fff; background: #c5221f; box-shadow: 0 10px 22px -12px rgba(197, 34, 31, 0.7); }
   .btn-danger-solid:hover { color: #fff; filter: brightness(1.08); transform: translateY(-1px); }
+  .btn-danger-ghost { color: var(--danger); background: transparent; border-color: var(--danger-line); }
+  .btn-danger-ghost:hover { background: var(--danger-bg); }
   .btn .ico { width: 18px; height: 18px; }
 
   .icon-btn {
@@ -128,6 +131,7 @@
   .field::placeholder { color: var(--muted); opacity: .8; }
   .field:hover { border-color: var(--brand-1); }
   .field:focus { outline: none; border-color: var(--brand-1); box-shadow: 0 0 0 3px rgba(63, 122, 124, 0.2); }
+  textarea.field { display: block; min-height: 120px; resize: vertical; line-height: 1.55; }
   select.field {
     appearance: none; -webkit-appearance: none; cursor: pointer; padding-right: 2.2rem;
     background-image: linear-gradient(45deg, transparent 50%, var(--muted) 50%), linear-gradient(135deg, var(--muted) 50%, transparent 50%);
@@ -157,6 +161,27 @@
   .section-add { display: flex; gap: 10px; }
   .section-add .field { flex: 1; }
 
+  /* ---------- Фильтр ---------- */
+  .filter-bar { margin-top: 22px; }
+  .filter-bar:empty { display: none; }
+  .seg {
+    display: inline-flex; gap: 2px; padding: 4px; max-width: 100%;
+    background: var(--glass); border: 1px solid var(--line); border-radius: 14px;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .seg button {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 7px 15px; border: 0; border-radius: 10px; background: transparent;
+    color: var(--muted); font: inherit; font-size: .9rem; font-weight: 600; white-space: nowrap; cursor: pointer;
+    transition: color .15s ease, background .15s ease;
+  }
+  .seg button:hover { color: var(--ink); }
+  .seg button[aria-pressed="true"] {
+    color: #fff; background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+    box-shadow: 0 8px 18px -10px rgba(63, 122, 124, 0.8);
+  }
+  .seg .n { font-size: .75rem; font-weight: 700; opacity: .75; }
+
   .empty {
     margin-top: 28px; padding: 44px 24px; text-align: center; color: var(--muted);
     background: var(--glass); border: 1px dashed var(--field-line); border-radius: 20px;
@@ -183,8 +208,17 @@
   }
   .task-row:last-child { border-bottom: 0; }
   .check { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: var(--brand-1); cursor: pointer; }
-  .task-text { flex: 1 1 200px; min-width: 0; cursor: pointer; overflow-wrap: anywhere; }
-  .task-row.done .task-text { text-decoration: line-through; color: var(--muted); }
+  .task-main { flex: 1 1 200px; min-width: 0; }
+  .task-title {
+    display: block; max-width: 100%; padding: 0; margin: 0; border: 0; background: none;
+    font: inherit; color: var(--ink); text-align: left; cursor: pointer; overflow-wrap: anywhere;
+  }
+  .task-title:hover { color: var(--brand-1); }
+  [data-bs-theme="dark"] .task-title:hover { color: #9fd3c4; }
+  .task-desc { display: flex; align-items: center; gap: 6px; margin-top: 2px; color: var(--muted); font-size: .84rem; }
+  .task-desc .ico { width: 14px; height: 14px; }
+  .task-desc span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .task-row.done .task-title { text-decoration: line-through; color: var(--muted); }
   .task-row.done .prio, .task-row.done .due { opacity: .5; }
   .task-actions { display: flex; gap: 2px; margin-left: auto; }
   .no-tasks { margin: 6px 0 0; color: var(--muted); font-size: .92rem; }
@@ -223,21 +257,28 @@
     .add-form { grid-template-columns: 1fr 1fr; }
     .add-form .f-text, .add-form .btn { grid-column: 1 / -1; }
     .section-add { flex-direction: column; }
+    .seg { display: flex; width: 100%; }
+    .seg button { flex: 1; padding: 7px 6px; font-size: .82rem; gap: 5px; }
   }
 
   /* ---------- Диалоги ---------- */
   dialog {
-    width: min(440px, calc(100vw - 32px)); padding: 0; color: var(--ink);
+    width: min(440px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto; padding: 0; color: var(--ink);
     background: var(--surface); border: 1px solid var(--line); border-radius: 22px;
     box-shadow: 0 40px 80px -30px rgba(20, 40, 60, 0.6);
   }
+  dialog.wide { width: min(560px, calc(100vw - 32px)); }
   dialog::backdrop { background: rgba(20, 32, 40, 0.38); backdrop-filter: blur(3px); }
   #dlg-form { padding: 24px; display: grid; gap: 14px; }
   .dlg-title { margin: 0; font-size: 1.2rem; font-weight: 800; }
-  .dlg-msg { margin: 0; color: var(--muted); }
+  .dlg-msg { margin: -8px 0 0; color: var(--muted); }
+  .dlg-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 12px; }
+  @media (max-width: 520px) { .dlg-grid { grid-template-columns: 1fr; } }
   .date-row { display: flex; gap: 8px; }
   .date-row .btn { white-space: nowrap; }
-  .dlg-actions { display: flex; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+  .check-line { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; width: fit-content; }
+  .dlg-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 6px; }
+  .dlg-actions .btn-danger-ghost { margin-right: auto; }
 </style>
 <script>
   // Тема под настройки системы (светлая/тёмная)
@@ -280,6 +321,8 @@
       <button class="btn btn-brand" type="submit" id="section-submit"></button>
     </form>
 
+    <div class="filter-bar" id="filter"></div>
+
     <div id="sections"></div>
   </div>
 </main>
@@ -292,6 +335,7 @@
 
 <script>
   const KEY = "planner-v1";
+  const FILTER_KEY = "planner-filter-v1";
   const PRIORITIES = [
     { id: "low",      label: "Незначительный" },
     { id: "medium",   label: "Средний" },
@@ -299,11 +343,17 @@
     { id: "critical", label: "Критичный" }
   ];
   const PRIO_LABEL = Object.fromEntries(PRIORITIES.map(p => [p.id, p.label]));
+  const FILTERS = [
+    { id: "all",    label: "Все" },
+    { id: "active", label: "Не выполненные" },
+    { id: "done",   label: "Выполненные" }
+  ];
   const ICONS = {
     edit:  '<path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"/>',
     trash: '<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/>',
     cal:   '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
-    plus:  '<path d="M12 5v14M5 12h14"/>'
+    plus:  '<path d="M12 5v14M5 12h14"/>',
+    note:  '<path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6"/>'
   };
 
   /* ---------- Даты (по местному времени, а не UTC) ---------- */
@@ -315,6 +365,7 @@
 
   /* ---------- Данные ---------- */
   let state = load();
+  let currentFilter = loadFilter();
   let lastToday = todayStr();
 
   function load() {
@@ -324,9 +375,10 @@
         data.sections.forEach(s => {
           s.tasks = Array.isArray(s.tasks) ? s.tasks : [];
           s.tasks.forEach(t => {
-            // Старые задачи (без дедлайна и приоритета) получают значения по умолчанию
+            // Задачи из прошлых версий получают значения по умолчанию
             if (!PRIO_LABEL[t.priority]) t.priority = "medium";
             if (typeof t.deadline !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(t.deadline)) t.deadline = "";
+            if (typeof t.description !== "string") t.description = "";
             t.done = !!t.done;
           });
         });
@@ -338,6 +390,24 @@
 
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function loadFilter() {
+    try {
+      const f = localStorage.getItem(FILTER_KEY);
+      if (FILTERS.some(x => x.id === f)) return f;
+    } catch (e) {}
+    return "all";
+  }
+
+  function storeFilter() {
+    try { localStorage.setItem(FILTER_KEY, currentFilter); } catch (e) {}
+  }
+
+  function passesFilter(task) {
+    if (currentFilter === "done") return task.done;
+    if (currentFilter === "active") return !task.done;
+    return true;
   }
 
   function commit() { save(); render(); }
@@ -402,7 +472,7 @@
     return { kind: kind, text: text, title: "Дедлайн: " + full };
   }
 
-  /* ---------- Диалог (редактирование и подтверждение) ---------- */
+  /* ---------- Диалог (карточка задачи, переименование, подтверждение) ---------- */
   function openDialog(cfg) {
     return new Promise(resolve => {
       const dlg = document.getElementById("dlg");
@@ -411,38 +481,68 @@
       let settled = false;
       const finish = v => { if (!settled) { settled = true; resolve(v); } };
 
+      dlg.classList.toggle("wide", !!cfg.wide);
       form.replaceChildren();
       form.append(el("h3", { className: "dlg-title", textContent: cfg.title }));
       if (cfg.message) form.append(el("p", { className: "dlg-msg", textContent: cfg.message }));
 
+      let grid = null;
       (cfg.fields || []).forEach(f => {
-        let input;
-        if (f.type === "select") input = makeSelect(f.options, f.value);
-        else input = el("input", { type: f.type || "text", className: "field", value: f.value || "", required: !!f.required, maxLength: f.maxLength || 200 });
+        let input, box;
+        if (f.type === "select") {
+          input = makeSelect(f.options, f.value);
+        } else if (f.type === "textarea") {
+          input = el("textarea", { className: "field", value: f.value || "", rows: f.rows || 4, maxLength: f.maxLength || 2000, placeholder: f.placeholder || "" });
+        } else if (f.type === "checkbox") {
+          input = el("input", { type: "checkbox", className: "check", checked: !!f.value });
+        } else {
+          input = el("input", { type: f.type || "text", className: "field", value: f.value || "", required: !!f.required, maxLength: f.maxLength || 200 });
+        }
         input.id = "dlg-" + f.name;
         inputs[f.name] = input;
 
-        const box = el("div", null, el("label", { className: "mini", htmlFor: input.id, textContent: f.label }));
-        if (f.type === "date") {
-          trackToday(input);
-          const clear = el("button", { type: "button", className: "btn btn-ghost", textContent: "Без срока" });
-          clear.onclick = () => { input.value = ""; input.dispatchEvent(new Event("input")); };
-          box.append(el("div", { className: "date-row" }, input, clear));
+        if (f.type === "checkbox") {
+          box = el("label", { className: "check-line", htmlFor: input.id }, input, f.label);
         } else {
-          box.append(input);
+          box = el("div", null, el("label", { className: "mini", htmlFor: input.id, textContent: f.label }));
+          if (f.type === "date") {
+            trackToday(input);
+            const clear = el("button", { type: "button", className: "btn btn-ghost", textContent: "Без срока" });
+            clear.onclick = () => { input.value = ""; input.dispatchEvent(new Event("input")); };
+            box.append(el("div", { className: "date-row" }, input, clear));
+          } else {
+            box.append(input);
+          }
         }
-        form.append(box);
+
+        if (f.half) {
+          if (!grid) { grid = el("div", { className: "dlg-grid" }); form.append(grid); }
+          grid.append(box);
+        } else {
+          grid = null;
+          form.append(box);
+        }
       });
 
+      const actions = el("div", { className: "dlg-actions" });
+      if (cfg.secondary) {
+        const sec = el("button", { type: "button", className: "btn btn-danger-ghost", textContent: cfg.secondary.text });
+        sec.onclick = () => { finish({ __action: cfg.secondary.action }); dlg.close(); };
+        actions.append(sec);
+      }
       const cancel = el("button", { type: "button", className: "btn btn-ghost", textContent: "Отмена" });
       cancel.onclick = () => dlg.close();
       const ok = el("button", { type: "submit", className: "btn " + (cfg.danger ? "btn-danger-solid" : "btn-brand"), textContent: cfg.submit || "Сохранить" });
-      form.append(el("div", { className: "dlg-actions" }, cancel, ok));
+      actions.append(cancel, ok);
+      form.append(actions);
 
       form.onsubmit = e => {
         e.preventDefault();
         const values = {};
-        for (const k in inputs) values[k] = inputs[k].value.trim();
+        for (const k in inputs) {
+          const i = inputs[k];
+          values[k] = i.type === "checkbox" ? i.checked : i.value.trim();
+        }
         finish(values);
         dlg.close();
       };
@@ -455,6 +555,39 @@
   document.getElementById("dlg").addEventListener("click", e => {
     if (e.target === e.currentTarget) e.currentTarget.close();
   });
+
+  /* ---------- Карточка задачи ---------- */
+  async function openTask(sec, task) {
+    const v = await openDialog({
+      title: "Карточка задачи",
+      message: "Раздел: " + sec.title,
+      wide: true,
+      submit: "Сохранить",
+      secondary: { text: "Удалить задачу", action: "delete" },
+      fields: [
+        { name: "text", label: "Название", value: task.text, required: true },
+        { name: "done", label: "Выполнена", type: "checkbox", value: task.done },
+        { name: "deadline", label: "Дедлайн", type: "date", value: task.deadline, half: true },
+        { name: "priority", label: "Приоритет", type: "select", options: PRIORITIES, value: task.priority, half: true },
+        { name: "description", label: "Описание", type: "textarea", rows: 5, value: task.description,
+          placeholder: "Детали, ссылки, заметки…" }
+      ]
+    });
+    if (!v) return;
+    if (v.__action === "delete") {
+      sec.tasks = sec.tasks.filter(t => t.id !== task.id);
+      commit();
+      return;
+    }
+    if (v.text) {
+      task.text = v.text;
+      task.done = v.done;
+      task.deadline = v.deadline;
+      task.priority = v.priority;
+      task.description = v.description;
+      commit();
+    }
+  }
 
   /* ---------- Отрисовка ---------- */
   function renderSummary() {
@@ -470,14 +603,41 @@
     if (overdue) box.append(el("span", { className: "due overdue", textContent: "Просрочено: " + overdue }));
   }
 
+  function renderFilter() {
+    const box = document.getElementById("filter");
+    box.replaceChildren();
+    if (!state.sections.length) return;
+    const all = state.sections.flatMap(s => s.tasks);
+    const counts = {
+      all: all.length,
+      active: all.filter(t => !t.done).length,
+      done: all.filter(t => t.done).length
+    };
+    box.append(el("div", { className: "seg", attrs: { role: "group", "aria-label": "Фильтр задач" } },
+      ...FILTERS.map(f => el("button", {
+        type: "button",
+        onclick: () => { currentFilter = f.id; storeFilter(); render(); },
+        attrs: { "aria-pressed": String(currentFilter === f.id) }
+      }, f.label, el("span", { className: "n", textContent: String(counts[f.id]) })))
+    ));
+  }
+
   function renderTask(sec, task) {
-    const cbId = "c-" + task.id;
-    const checkbox = el("input", { type: "checkbox", className: "check", id: cbId, checked: task.done });
+    const checkbox = el("input", { type: "checkbox", className: "check", checked: task.done,
+      attrs: { "aria-label": "Выполнена: " + task.text } });
     checkbox.onchange = () => { task.done = checkbox.checked; commit(); };
+
+    const main = el("div", { className: "task-main" },
+      el("button", { type: "button", className: "task-title", textContent: task.text, title: "Открыть карточку",
+        onclick: () => openTask(sec, task) })
+    );
+    if (task.description) {
+      main.append(el("div", { className: "task-desc" }, icon("note"), el("span", { textContent: task.description })));
+    }
 
     const row = el("li", { className: "task-row" + (task.done ? " done" : "") },
       checkbox,
-      el("label", { className: "task-text", htmlFor: cbId, textContent: task.text }),
+      main,
       el("span", { className: "prio prio-" + task.priority, textContent: PRIO_LABEL[task.priority] })
     );
 
@@ -487,22 +647,7 @@
     }
 
     row.append(el("div", { className: "task-actions" },
-      iconButton("edit", "Изменить задачу", async () => {
-        const v = await openDialog({
-          title: "Изменить задачу",
-          fields: [
-            { name: "text", label: "Задача", value: task.text, required: true },
-            { name: "deadline", label: "Дедлайн", type: "date", value: task.deadline },
-            { name: "priority", label: "Приоритет", type: "select", options: PRIORITIES, value: task.priority }
-          ]
-        });
-        if (v && v.text) {
-          task.text = v.text;
-          task.deadline = v.deadline;
-          task.priority = v.priority;
-          commit();
-        }
-      }),
+      iconButton("edit", "Открыть карточку", () => openTask(sec, task)),
       iconButton("trash", "Удалить задачу", () => {
         sec.tasks = sec.tasks.filter(t => t.id !== task.id);
         commit();
@@ -529,7 +674,9 @@
       e.preventDefault();
       const value = text.value.trim();
       if (!value) return;
-      sec.tasks.push({ id: uid(), text: value, done: false, deadline: date.value, priority: prio.value });
+      sec.tasks.push({ id: uid(), text: value, done: false, deadline: date.value, priority: prio.value, description: "" });
+      // Новая задача не выполнена: при фильтре «Выполненные» её бы не было видно
+      if (currentFilter === "done") { currentFilter = "all"; storeFilter(); }
       commit();
     };
     return form;
@@ -538,6 +685,7 @@
   function renderSection(sec) {
     const total = sec.tasks.length;
     const done = sec.tasks.filter(t => t.done).length;
+    const visible = sec.tasks.filter(passesFilter);
 
     const head = el("div", { className: "sec-head" },
       el("h2", { className: "sec-title", textContent: sec.title }),
@@ -564,9 +712,9 @@
     const bar = el("div", { className: "bar", attrs: { "aria-hidden": "true" } },
       el("span", { style: "width:" + (total ? Math.round(done / total * 100) : 0) + "%" }));
 
-    const list = total
-      ? el("ul", { className: "tasks" }, ...sec.tasks.map(t => renderTask(sec, t)))
-      : el("p", { className: "no-tasks", textContent: "В этом разделе пока нет задач." });
+    const list = visible.length
+      ? el("ul", { className: "tasks" }, ...visible.map(t => renderTask(sec, t)))
+      : el("p", { className: "no-tasks", textContent: total ? "Нет задач, подходящих под фильтр." : "В этом разделе пока нет задач." });
 
     return el("section", { className: "section-card" }, head, bar, list, renderAddForm(sec));
   }
@@ -574,6 +722,7 @@
   function render() {
     lastToday = todayStr();
     renderSummary();
+    renderFilter();
     const root = document.getElementById("sections");
     root.replaceChildren();
     if (!state.sections.length) {
@@ -586,8 +735,7 @@
   }
 
   /* ---------- Старт ---------- */
-  const sectionSubmit = document.getElementById("section-submit");
-  sectionSubmit.append(icon("plus"), "Добавить раздел");
+  document.getElementById("section-submit").append(icon("plus"), "Добавить раздел");
 
   document.getElementById("section-form").onsubmit = e => {
     e.preventDefault();
