@@ -94,7 +94,7 @@
     transition: transform .15s ease, box-shadow .15s ease, filter .15s ease, background .15s ease, border-color .15s ease;
   }
   .btn:focus-visible, .icon-btn:focus-visible, .field:focus-visible, .check:focus-visible,
-  .seg button:focus-visible, .task-title:focus-visible {
+  .seg button:focus-visible, .task-title:focus-visible, .note:focus-visible, summary:focus-visible {
     outline: 2px solid var(--brand-2); outline-offset: 2px;
   }
   .btn-brand {
@@ -109,13 +109,15 @@
   .btn-danger-solid:hover { color: #fff; filter: brightness(1.08); transform: translateY(-1px); }
   .btn-danger-ghost { color: var(--danger); background: transparent; border-color: var(--danger-line); }
   .btn-danger-ghost:hover { background: var(--danger-bg); }
+  .btn-sm { padding: 0.4rem 0.85rem; font-size: .85rem; border-radius: 10px; }
   .btn .ico { width: 18px; height: 18px; }
+  .btn-sm .ico { width: 16px; height: 16px; }
 
   .icon-btn {
     display: inline-flex; align-items: center; justify-content: center;
     width: 34px; height: 34px; padding: 0; flex-shrink: 0;
     color: var(--muted); background: transparent; border: 1px solid transparent; border-radius: 10px; cursor: pointer;
-    transition: color .15s ease, background .15s ease, border-color .15s ease;
+    font: inherit; transition: color .15s ease, background .15s ease, border-color .15s ease;
   }
   .icon-btn:hover { color: var(--ink); background: var(--glass-strong); border-color: var(--line); }
   .icon-btn.danger:hover { color: var(--danger); background: var(--danger-bg); border-color: var(--danger-line); }
@@ -147,32 +149,39 @@
     background-color: var(--danger-bg); border-color: var(--danger-line);
   }
   input[type="date"].field.is-today:focus { box-shadow: 0 0 0 3px rgba(217, 48, 37, 0.2); border-color: var(--danger); }
+  .mini { display: block; margin: 0 0 5px 2px; color: var(--muted); font-size: .75rem; font-weight: 700; }
 
-  /* ---------- Страница ---------- */
-  .planner-wrap { max-width: 860px; padding-top: 44px; padding-bottom: 72px; }
+  /* ---------- Страница и колонки ---------- */
+  .container.planner-wrap { max-width: 1240px; padding-top: 40px; padding-bottom: 72px; }
   .page-title {
     font-weight: 800; letter-spacing: -0.03em; line-height: 1.1; margin: 0 0 10px;
     font-size: clamp(1.9rem, 4vw, 2.6rem);
     background: var(--title-grad); -webkit-background-clip: text; background-clip: text; color: transparent;
   }
-  .summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 26px; min-height: 28px; }
+  .summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 24px; min-height: 28px; }
   .sum-text { color: var(--muted); font-weight: 500; margin-right: 4px; }
+
+  .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; align-items: start; }
+  @media (max-width: 1100px) { .cols { grid-template-columns: minmax(0, 1fr); gap: 34px; } }
+  .col-head { display: flex; align-items: center; gap: 10px; min-height: 40px; margin-bottom: 12px; }
+  .col-title { flex: 1; margin: 0; font-size: 1.3rem; font-weight: 800; letter-spacing: -0.01em; }
+  .col-count { color: var(--muted); font-size: .85rem; font-weight: 600; }
 
   .section-add { display: flex; gap: 10px; }
   .section-add .field { flex: 1; }
 
   /* ---------- Фильтр ---------- */
-  .filter-bar { margin-top: 22px; }
+  .filter-bar { margin-top: 14px; }
   .filter-bar:empty { display: none; }
   .seg {
-    display: inline-flex; gap: 2px; padding: 4px; max-width: 100%;
+    display: flex; flex-wrap: wrap; gap: 2px; padding: 4px; max-width: 100%;
     background: var(--glass); border: 1px solid var(--line); border-radius: 14px;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
   }
   .seg button {
-    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 7px 15px; border: 0; border-radius: 10px; background: transparent;
-    color: var(--muted); font: inherit; font-size: .9rem; font-weight: 600; white-space: nowrap; cursor: pointer;
+    flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    padding: 7px 8px; border: 0; border-radius: 10px; background: transparent;
+    color: var(--muted); font: inherit; font-size: .84rem; font-weight: 600; white-space: nowrap; cursor: pointer;
     transition: color .15s ease, background .15s ease;
   }
   .seg button:hover { color: var(--ink); }
@@ -180,45 +189,48 @@
     color: #fff; background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
     box-shadow: 0 8px 18px -10px rgba(63, 122, 124, 0.8);
   }
-  .seg .n { font-size: .75rem; font-weight: 700; opacity: .75; }
+  .seg .n { font-size: .74rem; font-weight: 700; opacity: .75; }
 
   .empty {
-    margin-top: 28px; padding: 44px 24px; text-align: center; color: var(--muted);
+    margin-top: 18px; padding: 36px 20px; text-align: center; color: var(--muted);
     background: var(--glass); border: 1px dashed var(--field-line); border-radius: 20px;
   }
-  .empty strong { display: block; color: var(--ink); font-size: 1.1rem; margin-bottom: 4px; }
+  .empty strong { display: block; color: var(--ink); font-size: 1.05rem; margin-bottom: 4px; }
+  .empty .btn { margin-top: 14px; }
 
-  /* ---------- Раздел ---------- */
+  /* ---------- Карточки-разделы ---------- */
   .section-card {
-    margin-top: 18px; padding: 20px 22px 22px;
+    margin-top: 16px; padding: 18px 18px 20px;
     background: var(--glass); border: 1px solid var(--line); border-radius: 22px;
     backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
     box-shadow: 0 18px 40px -28px rgba(40, 70, 90, 0.45);
   }
   .sec-head { display: flex; align-items: center; gap: 6px; }
-  .sec-title { flex: 1; min-width: 0; margin: 0; font-size: 1.25rem; font-weight: 800; letter-spacing: -0.01em; overflow-wrap: anywhere; }
-  .sec-count { color: var(--muted); font-size: .85rem; font-weight: 600; margin-right: 8px; white-space: nowrap; }
+  .sec-title { flex: 1; min-width: 0; margin: 0; font-size: 1.15rem; font-weight: 800; letter-spacing: -0.01em; overflow-wrap: anywhere; }
+  .sec-count { color: var(--muted); font-size: .85rem; font-weight: 600; margin-right: 6px; white-space: nowrap; }
   .bar { height: 6px; margin: 12px 0 8px; background: var(--line); border-radius: 99px; overflow: hidden; }
   .bar > span { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--brand-1), var(--brand-2)); transition: width .3s ease; }
+  .hint { margin: 8px 0 0; color: var(--muted); font-size: .9rem; }
 
   .tasks { list-style: none; margin: 0; padding: 0; }
   .task-row {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px;
-    padding: 11px 0; border-bottom: 1px solid var(--line);
+    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+    padding: 10px 0; border-bottom: 1px solid var(--line);
   }
   .task-row:last-child { border-bottom: 0; }
   .check { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: var(--brand-1); cursor: pointer; }
-  .task-main { flex: 1 1 200px; min-width: 0; }
+  .task-main { flex: 1 1 150px; min-width: 0; }
   .task-title {
     display: block; max-width: 100%; padding: 0; margin: 0; border: 0; background: none;
     font: inherit; color: var(--ink); text-align: left; cursor: pointer; overflow-wrap: anywhere;
   }
   .task-title:hover { color: var(--brand-1); }
   [data-bs-theme="dark"] .task-title:hover { color: #9fd3c4; }
+  .task-text { overflow-wrap: anywhere; }
   .task-desc { display: flex; align-items: center; gap: 6px; margin-top: 2px; color: var(--muted); font-size: .84rem; }
   .task-desc .ico { width: 14px; height: 14px; }
   .task-desc span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .task-row.done .task-title { text-decoration: line-through; color: var(--muted); }
+  .task-row.done .task-title, .task-row.done .task-text { text-decoration: line-through; color: var(--muted); }
   .task-row.done .prio, .task-row.done .due { opacity: .5; }
   .task-actions { display: flex; gap: 2px; margin-left: auto; }
   .no-tasks { margin: 6px 0 0; color: var(--muted); font-size: .92rem; }
@@ -227,7 +239,7 @@
   .prio {
     --p: var(--p-medium);
     display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; white-space: nowrap;
-    font-size: .78rem; font-weight: 700; border-radius: 999px;
+    font-size: .76rem; font-weight: 700; border-radius: 999px;
     color: color-mix(in srgb, var(--p) 78%, var(--ink));
     background: color-mix(in srgb, var(--p) 14%, transparent);
   }
@@ -240,7 +252,7 @@
   /* Дедлайн */
   .due {
     display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; white-space: nowrap;
-    font-size: .78rem; font-weight: 600; color: var(--muted);
+    font-size: .76rem; font-weight: 600; color: var(--muted);
     background: var(--glass); border: 1px solid var(--line); border-radius: 999px;
   }
   .due .ico { width: 14px; height: 14px; }
@@ -249,17 +261,42 @@
 
   /* Форма добавления задачи */
   .add-form {
-    display: grid; grid-template-columns: minmax(0, 1fr) 168px 176px auto; gap: 10px; align-items: end;
+    display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 10px; align-items: end;
     margin-top: 14px; padding-top: 16px; border-top: 1px dashed var(--field-line);
   }
-  .mini { display: block; margin: 0 0 5px 2px; color: var(--muted); font-size: .75rem; font-weight: 700; }
-  @media (max-width: 767.98px) {
-    .add-form { grid-template-columns: 1fr 1fr; }
-    .add-form .f-text, .add-form .btn { grid-column: 1 / -1; }
-    .section-add { flex-direction: column; }
-    .seg { display: flex; width: 100%; }
-    .seg button { flex: 1; padding: 7px 6px; font-size: .82rem; gap: 5px; }
+  .add-form .f-text, .add-form .btn { grid-column: 1 / -1; }
+
+  /* ---------- Тренировки ---------- */
+  details.day { border-bottom: 1px solid var(--line); }
+  details.day:last-child { border-bottom: 0; }
+  details.day > summary {
+    display: flex; align-items: center; gap: 10px; padding: 11px 0; cursor: pointer; list-style: none; font-weight: 700;
   }
+  details.day > summary::-webkit-details-marker { display: none; }
+  details.day > summary::before {
+    content: ""; width: 7px; height: 7px; flex-shrink: 0; margin: 0 2px 2px 3px;
+    border-right: 2px solid var(--muted); border-bottom: 2px solid var(--muted);
+    transform: rotate(-45deg); transition: transform .15s ease;
+  }
+  details.day[open] > summary::before { transform: rotate(45deg); margin-bottom: 4px; }
+  .day-count { margin-left: auto; color: var(--muted); font-size: .85rem; font-weight: 600; white-space: nowrap; }
+  details.day .tasks { padding-bottom: 8px; }
+
+  /* ---------- Заметки ---------- */
+  .notes-list { display: grid; gap: 12px; margin-top: 12px; }
+  .note {
+    padding: 14px 16px; background: var(--glass); border: 1px solid var(--line); border-radius: 18px;
+    cursor: pointer; transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+  }
+  .note:hover { transform: translateY(-2px); border-color: var(--brand-1); box-shadow: 0 14px 28px -20px rgba(40, 70, 90, 0.5); }
+  .note h3 { display: flex; justify-content: space-between; gap: 8px; margin: 0 0 4px; font-size: 1rem; font-weight: 700; overflow-wrap: anywhere; }
+  .note p {
+    margin: 0; color: var(--muted); font-size: .9rem; overflow-wrap: anywhere;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
+  }
+  .note .meta { margin-top: 8px; font-size: .75rem; color: var(--muted); font-weight: 600; }
+  .pin { color: var(--brand-1); font-size: .72rem; font-weight: 800; white-space: nowrap; }
+  [data-bs-theme="dark"] .pin { color: #9fd3c4; }
 
   /* ---------- Диалоги ---------- */
   dialog {
@@ -268,17 +305,40 @@
     box-shadow: 0 40px 80px -30px rgba(20, 40, 60, 0.6);
   }
   dialog.wide { width: min(560px, calc(100vw - 32px)); }
+  #wdlg { width: min(820px, calc(100vw - 32px)); }
   dialog::backdrop { background: rgba(20, 32, 40, 0.38); backdrop-filter: blur(3px); }
-  #dlg-form { padding: 24px; display: grid; gap: 14px; }
+  #dlg-form, #wdlg-form { padding: 24px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; }
   .dlg-title { margin: 0; font-size: 1.2rem; font-weight: 800; }
   .dlg-msg { margin: -8px 0 0; color: var(--muted); }
   .dlg-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 12px; }
-  @media (max-width: 520px) { .dlg-grid { grid-template-columns: 1fr; } }
+  @media (max-width: 520px) { .dlg-grid { grid-template-columns: minmax(0, 1fr); } }
   .date-row { display: flex; gap: 8px; }
   .date-row .btn { white-space: nowrap; }
   .check-line { display: inline-flex; align-items: center; gap: 10px; font-weight: 600; cursor: pointer; width: fit-content; }
   .dlg-actions { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 10px; margin-top: 6px; }
   .dlg-actions .btn-danger-ghost { margin-right: auto; }
+
+  /* Редактор таблицы тренировок */
+  .wd-top { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px; }
+  .wd-top .f { width: 190px; }
+  .tbl-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 14px; background: var(--field-bg); }
+  .tbl-scroll { max-height: 340px; overflow: auto; }
+  table.plan { width: 100%; border-collapse: collapse; min-width: 560px; }
+  table.plan th { position: sticky; top: 0; z-index: 1; padding: 10px 8px; text-align: left; font-size: .75rem; font-weight: 700; color: var(--muted); background: var(--surface); border-bottom: 1px solid var(--line); }
+  table.plan td { padding: 6px; border-bottom: 1px solid var(--line); }
+  table.plan tr:last-child td { border-bottom: 0; }
+  table.plan .field { padding: 0.4rem 0.55rem; border-radius: 9px; }
+  table.plan input[type="number"] { text-align: center; -moz-appearance: textfield; }
+  table.plan td.day-cell { width: 74px; padding-left: 12px; font-weight: 700; color: var(--muted); }
+  .ex-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .ex-bar .seg { display: inline-flex; width: auto; }
+  .ex-bar .seg button { flex: none; padding: 7px 14px; }
+  .ex-add { display: flex; gap: 6px; margin-left: auto; }
+  .ex-add .field { width: 200px; }
+  @media (max-width: 720px) { .ex-add { margin-left: 0; width: 100%; } .ex-add .field { flex: 1; width: auto; } .wd-top .f { width: 100%; } }
+  .wd-info { margin: 0; color: var(--muted); font-size: .92rem; }
+  .wd-warn { margin: 0; color: var(--danger); font-size: .9rem; font-weight: 600; }
+  .wd-warn:empty, .wd-info:empty { display: none; }
 </style>
 <script>
   // Тема под настройки системы (светлая/тёмная)
@@ -315,15 +375,37 @@
     <h1 class="page-title">Мой планировщик</h1>
     <div class="summary" id="summary"></div>
 
-    <form id="section-form" class="section-add">
-      <input class="field" type="text" id="section-input" maxlength="80" required
-             placeholder="Новый раздел, например «Работа»" aria-label="Название нового раздела">
-      <button class="btn btn-brand" type="submit" id="section-submit"></button>
-    </form>
+    <div class="cols">
 
-    <div class="filter-bar" id="filter"></div>
+      <!-- Колонка 1: задачи -->
+      <section class="col-tasks" aria-labelledby="h-tasks">
+        <div class="col-head"><h2 class="col-title" id="h-tasks">Задачи</h2><span class="col-count" id="tasks-count"></span></div>
+        <form id="section-form" class="section-add">
+          <input class="field" type="text" id="section-input" maxlength="80" required
+                 placeholder="Новый раздел, например «Работа»" aria-label="Название нового раздела">
+          <button class="btn btn-brand" type="submit" id="section-submit"></button>
+        </form>
+        <div class="filter-bar" id="filter"></div>
+        <div id="sections"></div>
+      </section>
 
-    <div id="sections"></div>
+      <!-- Колонка 2: тренировки -->
+      <section class="col-workouts" aria-labelledby="h-workouts">
+        <div class="col-head"><h2 class="col-title" id="h-workouts">Тренировки</h2></div>
+        <div id="workouts"></div>
+      </section>
+
+      <!-- Колонка 3: заметки -->
+      <section class="col-notes" aria-labelledby="h-notes">
+        <div class="col-head">
+          <h2 class="col-title" id="h-notes">Заметки</h2>
+          <button class="btn btn-ghost btn-sm" type="button" id="note-new"></button>
+        </div>
+        <input class="field" type="search" id="note-search" placeholder="Поиск по заметкам" aria-label="Поиск по заметкам">
+        <div class="notes-list" id="notes"></div>
+      </section>
+
+    </div>
   </div>
 </main>
 
@@ -332,10 +414,13 @@
 </footer>
 
 <dialog id="dlg"><form id="dlg-form"></form></dialog>
+<dialog id="wdlg"><form id="wdlg-form"></form></dialog>
 
 <script>
   const KEY = "planner-v1";
   const FILTER_KEY = "planner-filter-v1";
+  const MAX_SETS = 4;
+  const MAX_DAYS = 30;
   const PRIORITIES = [
     { id: "low",      label: "Незначительный" },
     { id: "medium",   label: "Средний" },
@@ -353,20 +438,55 @@
     trash: '<path d="M3 6h18"/><path d="M8 6V4h8v2"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/>',
     cal:   '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
     plus:  '<path d="M12 5v14M5 12h14"/>',
-    note:  '<path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6"/>'
+    note:  '<path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6"/>',
+    grid:  '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/>'
   };
+
+  const $ = id => document.getElementById(id);
+  const str = v => (typeof v === "string" ? v : "");
+  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+  const clampInt = (v, lo, hi) => { const n = parseInt(v, 10); return isNaN(n) ? 0 : Math.max(lo, Math.min(hi, n)); };
 
   /* ---------- Даты (по местному времени, а не UTC) ---------- */
   function pad(n) { return String(n).padStart(2, "0"); }
   function fmt(d) { return d.getFullYear() + "-" + pad(d.getMonth() + 1) + "-" + pad(d.getDate()); }
   function todayStr() { return fmt(new Date()); }
-  function tomorrowStr() { const d = new Date(); d.setDate(d.getDate() + 1); return fmt(d); }
+  function addDays(s, n) { const p = s.split("-").map(Number); return fmt(new Date(p[0], p[1] - 1, p[2] + n)); }
   function parseDate(s) { const p = s.split("-").map(Number); return new Date(p[0], p[1] - 1, p[2]); }
+  function shortDate(s) {
+    const d = parseDate(s);
+    const sameYear = d.getFullYear() === new Date().getFullYear();
+    return d.toLocaleDateString("ru-RU", sameYear ? { day: "numeric", month: "short" } : { day: "numeric", month: "short", year: "numeric" });
+  }
+  function plural(n, a, b, c) {
+    const m = n % 100, k = n % 10;
+    if (m > 10 && m < 20) return c;
+    if (k === 1) return a;
+    if (k >= 2 && k <= 4) return b;
+    return c;
+  }
+  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
   /* ---------- Данные ---------- */
   let state = load();
   let currentFilter = loadFilter();
   let lastToday = todayStr();
+  const openDays = {}; // какие дни тренировок развёрнуты вручную
+
+  function normRow(r) {
+    if (!r || typeof r !== "object") return null;
+    const sets = [];
+    for (let i = 0; i < MAX_SETS; i++) sets.push(Array.isArray(r.sets) ? clampInt(r.sets[i], 0, 99) : 0);
+    return { name: str(r.name).slice(0, 60), day: clampInt(r.day, 1, MAX_DAYS) || 1, sets: sets };
+  }
+  function normWTask(t) {
+    if (!t || typeof t !== "object" || typeof t.key !== "string" || !DATE_RE.test(str(t.date))) return null;
+    return {
+      id: str(t.id) || uid(), key: t.key, text: str(t.text), exercise: str(t.exercise),
+      day: clampInt(t.day, 1, MAX_DAYS) || 1, set: clampInt(t.set, 1, MAX_SETS) || 1,
+      date: t.date, done: !!t.done
+    };
+  }
 
   function load() {
     try {
@@ -377,15 +497,24 @@
           s.tasks.forEach(t => {
             // Задачи из прошлых версий получают значения по умолчанию
             if (!PRIO_LABEL[t.priority]) t.priority = "medium";
-            if (typeof t.deadline !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(t.deadline)) t.deadline = "";
+            if (typeof t.deadline !== "string" || !DATE_RE.test(t.deadline)) t.deadline = "";
             if (typeof t.description !== "string") t.description = "";
             t.done = !!t.done;
           });
         });
+        data.notes = (Array.isArray(data.notes) ? data.notes : []).filter(n => n && typeof n === "object").map(n => ({
+          id: str(n.id) || uid(), title: str(n.title), text: str(n.text), pinned: !!n.pinned, updated: Number(n.updated) || Date.now()
+        }));
+        const w = data.workouts && typeof data.workouts === "object" ? data.workouts : {};
+        data.workouts = {
+          startDate: DATE_RE.test(str(w.startDate)) ? w.startDate : todayStr(),
+          rows: (Array.isArray(w.rows) ? w.rows : []).map(normRow).filter(Boolean),
+          tasks: (Array.isArray(w.tasks) ? w.tasks : []).map(normWTask).filter(Boolean)
+        };
         return data;
       }
     } catch (e) {}
-    return { sections: [] };
+    return { sections: [], notes: [], workouts: { startDate: todayStr(), rows: [], tasks: [] } };
   }
 
   function save() {
@@ -399,11 +528,9 @@
     } catch (e) {}
     return "all";
   }
-
   function storeFilter() {
     try { localStorage.setItem(FILTER_KEY, currentFilter); } catch (e) {}
   }
-
   function passesFilter(task) {
     if (currentFilter === "done") return task.done;
     if (currentFilter === "active") return !task.done;
@@ -411,8 +538,6 @@
   }
 
   function commit() { save(); render(); }
-
-  function uid() { return Date.now().toString(36) + Math.random().toString(36).slice(2, 7); }
 
   /* ---------- Помощники для DOM ---------- */
   function el(tag, props, ...children) {
@@ -457,26 +582,26 @@
     upd();
   }
 
-  function dueInfo(task) {
-    if (!task.deadline) return null;
+  // Состояние срока: сегодня, просрочено, обычный; у выполненного тревожной подсветки нет
+  function dueFor(dateStr, done) {
     const today = todayStr();
-    const d = parseDate(task.deadline);
-    const sameYear = d.getFullYear() === new Date().getFullYear();
-    const short = d.toLocaleDateString("ru-RU", sameYear ? { day: "numeric", month: "short" } : { day: "numeric", month: "short", year: "numeric" });
-    const full = d.toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" });
-    let kind = "future", text = short;
-    if (task.deadline === today) { kind = "today"; text = "Сегодня"; }
-    else if (task.deadline < today) { kind = "overdue"; text = "Просрочено · " + short; }
-    else if (task.deadline === tomorrowStr()) { text = "Завтра"; }
-    if (task.done) kind = "done"; // у выполненных задач тревожной подсветки нет
-    return { kind: kind, text: text, title: "Дедлайн: " + full };
+    let kind = "future", text = shortDate(dateStr);
+    if (dateStr === today) { kind = "today"; text = "Сегодня"; }
+    else if (dateStr < today) { kind = "overdue"; text = "Просрочено · " + text; }
+    else if (dateStr === addDays(today, 1)) { text = "Завтра"; }
+    if (done) kind = "done";
+    return { kind: kind, text: text, title: "Дата: " + parseDate(dateStr).toLocaleDateString("ru-RU", { day: "numeric", month: "long", year: "numeric" }) };
+  }
+  function dueChip(dateStr, done) {
+    const d = dueFor(dateStr, done);
+    return el("span", { className: "due " + d.kind, title: d.title }, icon("cal"), d.text);
   }
 
-  /* ---------- Диалог (карточка задачи, переименование, подтверждение) ---------- */
+  /* ---------- Диалог (карточки, подтверждения) ---------- */
   function openDialog(cfg) {
     return new Promise(resolve => {
-      const dlg = document.getElementById("dlg");
-      const form = document.getElementById("dlg-form");
+      const dlg = $("dlg");
+      const form = $("dlg-form");
       const inputs = {};
       let settled = false;
       const finish = v => { if (!settled) { settled = true; resolve(v); } };
@@ -551,12 +676,12 @@
     });
   }
 
-  // Закрытие по клику на затемнённый фон
-  document.getElementById("dlg").addEventListener("click", e => {
+  // Закрытие по клику на затемнённый фон (только у обычных диалогов)
+  $("dlg").addEventListener("click", e => {
     if (e.target === e.currentTarget) e.currentTarget.close();
   });
 
-  /* ---------- Карточка задачи ---------- */
+  /* ---------- Задачи ---------- */
   async function openTask(sec, task) {
     const v = await openDialog({
       title: "Карточка задачи",
@@ -589,22 +714,26 @@
     }
   }
 
-  /* ---------- Отрисовка ---------- */
   function renderSummary() {
-    const box = document.getElementById("summary");
+    const box = $("summary");
     box.replaceChildren();
     const all = state.sections.flatMap(s => s.tasks);
     const done = all.filter(t => t.done).length;
     const today = todayStr();
     const dueToday = all.filter(t => !t.done && t.deadline === today).length;
     const overdue = all.filter(t => !t.done && t.deadline && t.deadline < today).length;
-    box.append(el("span", { className: "sum-text", textContent: all.length ? "Выполнено " + done + " из " + all.length : "Пока нет задач" }));
+    box.append(el("span", { className: "sum-text", textContent: all.length ? "Задачи: выполнено " + done + " из " + all.length : "Пока нет задач" }));
     if (dueToday) box.append(el("span", { className: "due today", textContent: "Срок сегодня: " + dueToday }));
     if (overdue) box.append(el("span", { className: "due overdue", textContent: "Просрочено: " + overdue }));
+    const wt = state.workouts.tasks.filter(t => t.date === today);
+    if (wt.length) {
+      const wd = wt.filter(t => t.done).length;
+      box.append(el("span", { className: "sum-text", textContent: "Тренировка сегодня: " + wd + " из " + wt.length }));
+    }
   }
 
   function renderFilter() {
-    const box = document.getElementById("filter");
+    const box = $("filter");
     box.replaceChildren();
     if (!state.sections.length) return;
     const all = state.sections.flatMap(s => s.tasks);
@@ -641,10 +770,7 @@
       el("span", { className: "prio prio-" + task.priority, textContent: PRIO_LABEL[task.priority] })
     );
 
-    const due = dueInfo(task);
-    if (due) {
-      row.append(el("span", { className: "due " + due.kind, title: due.title }, icon("cal"), due.text));
-    }
+    if (task.deadline) row.append(dueChip(task.deadline, task.done));
 
     row.append(el("div", { className: "task-actions" },
       iconButton("edit", "Открыть карточку", () => openTask(sec, task)),
@@ -688,7 +814,7 @@
     const visible = sec.tasks.filter(passesFilter);
 
     const head = el("div", { className: "sec-head" },
-      el("h2", { className: "sec-title", textContent: sec.title }),
+      el("h3", { className: "sec-title", textContent: sec.title }),
       el("span", { className: "sec-count", textContent: total ? done + " из " + total : "" }),
       iconButton("edit", "Переименовать раздел", async () => {
         const v = await openDialog({
@@ -719,11 +845,11 @@
     return el("section", { className: "section-card" }, head, bar, list, renderAddForm(sec));
   }
 
-  function render() {
-    lastToday = todayStr();
-    renderSummary();
+  function renderTasksColumn() {
     renderFilter();
-    const root = document.getElementById("sections");
+    const all = state.sections.flatMap(s => s.tasks);
+    $("tasks-count").textContent = all.length ? all.filter(t => t.done).length + " из " + all.length : "";
+    const root = $("sections");
     root.replaceChildren();
     if (!state.sections.length) {
       root.append(el("div", { className: "empty" },
@@ -734,12 +860,361 @@
     state.sections.forEach(sec => root.append(renderSection(sec)));
   }
 
-  /* ---------- Старт ---------- */
-  document.getElementById("section-submit").append(icon("plus"), "Добавить раздел");
+  /* ---------- Тренировки ---------- */
+  function cleanRows(rows) {
+    return rows
+      .filter(r => r.name.trim() && r.sets.some(s => s > 0))
+      .map(r => ({ name: r.name.trim(), day: r.day, sets: r.sets.slice(0, MAX_SETS) }));
+  }
 
-  document.getElementById("section-form").onsubmit = e => {
+  // Из таблицы получаем список подходов: каждый подход с повторами это одна задача
+  function buildWorkoutTasks(rows, start) {
+    const out = [];
+    const seen = new Set();
+    rows.map((r, i) => ({ r: r, i: i }))
+      .filter(x => x.r.name.trim() && x.r.day >= 1)
+      .sort((a, b) => a.r.day - b.r.day || a.i - b.i)
+      .forEach(x => {
+        const name = x.r.name.trim();
+        x.r.sets.forEach((reps, si) => {
+          if (!(reps > 0)) return;
+          const key = name + "|" + x.r.day + "|" + (si + 1);
+          if (seen.has(key)) return; // повтор той же строки игнорируем
+          seen.add(key);
+          out.push({
+            key: key, exercise: name, day: x.r.day, set: si + 1, reps: reps,
+            text: name + " — подход " + (si + 1) + ": " + reps + " " + plural(reps, "повтор", "повтора", "повторов"),
+            date: addDays(start, x.r.day - 1)
+          });
+        });
+      });
+    return out;
+  }
+
+  // Пересобираем чеклисты по таблице, сохраняя отметки у подходов, которые остались в плане
+  function syncWorkouts() {
+    const w = state.workouts;
+    const old = new Map(w.tasks.map(t => [t.key, t]));
+    w.tasks = buildWorkoutTasks(w.rows, w.startDate).map(t => {
+      const o = old.get(t.key);
+      return { id: o ? o.id : uid(), key: t.key, text: t.text, exercise: t.exercise, day: t.day, set: t.set, date: t.date, done: o ? o.done : false };
+    });
+  }
+
+  function dayGroups(tasks) {
+    const groups = [];
+    tasks.forEach(t => {
+      let g = groups.find(x => x.day === t.day);
+      if (!g) { g = { day: t.day, date: t.date, tasks: [] }; groups.push(g); }
+      g.tasks.push(t);
+    });
+    return groups;
+  }
+
+  function defaultOpenDay(groups) {
+    const today = todayStr();
+    let g = groups.find(x => x.date === today);
+    if (g) return g.day;
+    g = groups.find(x => x.date > today);
+    if (g) return g.day;
+    g = groups.find(x => x.tasks.some(y => !y.done));
+    return g ? g.day : null;
+  }
+
+  function renderWorkouts() {
+    const box = $("workouts");
+    box.replaceChildren();
+    const w = state.workouts;
+    const tasks = w.tasks;
+    const done = tasks.filter(t => t.done).length;
+    const days = new Set(tasks.map(t => t.day)).size;
+    const exCount = new Set(tasks.map(t => t.exercise)).size;
+
+    const plan = el("section", { className: "section-card" },
+      el("div", { className: "sec-head" },
+        el("h3", { className: "sec-title", textContent: "Мои тренировки" }),
+        el("span", { className: "sec-count", textContent: tasks.length ? done + " из " + tasks.length : "" })));
+    if (tasks.length) {
+      plan.append(el("div", { className: "bar", attrs: { "aria-hidden": "true" } },
+        el("span", { style: "width:" + Math.round(done / tasks.length * 100) + "%" })));
+      plan.append(el("p", { className: "hint", textContent:
+        exCount + " " + plural(exCount, "упражнение", "упражнения", "упражнений") + ", " +
+        days + " " + plural(days, "день", "дня", "дней") + ", день 1 это " + shortDate(w.startDate) }));
+    } else {
+      plan.append(el("p", { className: "hint", textContent: "План пуст. Укажите упражнения, повторы по подходам и дни, и чеклисты появятся ниже." }));
+    }
+    plan.append(el("button", { type: "button", className: "btn btn-sm " + (tasks.length ? "btn-ghost" : "btn-brand"),
+      style: "margin-top:14px", onclick: openWorkoutEditor }, icon("grid"), "Таблица тренировок"));
+    box.append(plan);
+
+    if (!tasks.length) return;
+
+    const groups = dayGroups(tasks);
+    const defOpen = defaultOpenDay(groups);
+    const card = el("section", { className: "section-card" },
+      el("div", { className: "sec-head" }, el("h3", { className: "sec-title", textContent: "Чеклисты" })));
+    groups.forEach(g => {
+      const gDone = g.tasks.filter(t => t.done).length;
+      const allDone = gDone === g.tasks.length;
+      const det = el("details", { className: "day" });
+      det.open = (g.day in openDays) ? openDays[g.day] : g.day === defOpen;
+      const sum = el("summary", null,
+        el("span", { textContent: "День " + g.day }),
+        dueChip(g.date, allDone),
+        el("span", { className: "day-count", textContent: gDone + " из " + g.tasks.length }));
+      sum.addEventListener("click", () => { openDays[g.day] = !det.open; });
+      const ul = el("ul", { className: "tasks" });
+      g.tasks.forEach(t => {
+        const cb = el("input", { type: "checkbox", className: "check", checked: t.done, attrs: { "aria-label": "Выполнено: " + t.text } });
+        cb.onchange = () => { t.done = cb.checked; commit(); };
+        ul.append(el("li", { className: "task-row" + (t.done ? " done" : "") }, cb, el("div", { className: "task-main task-text", textContent: t.text })));
+      });
+      det.append(sum, ul);
+      card.append(det);
+    });
+    box.append(card);
+  }
+
+  /* ---------- Редактор таблицы тренировок ---------- */
+  function openWorkoutEditor() {
+    const dlg = $("wdlg");
+    const form = $("wdlg-form");
+    const draft = {
+      startDate: state.workouts.startDate,
+      rows: state.workouts.rows.map(r => ({ name: r.name, day: r.day, sets: r.sets.slice() }))
+    };
+    if (!draft.rows.length) draft.rows.push({ name: "", day: 1, sets: [0, 0, 0, 0] });
+    let mode = "A";
+    let selEx = "";
+    let extra = [];
+
+    const tblArea = el("div");
+    const info = el("p", { className: "wd-info", attrs: { role: "status" } });
+    const warn = el("p", { className: "wd-warn" });
+
+    function updateInfo() {
+      const tasks = buildWorkoutTasks(cleanRows(draft.rows), draft.startDate);
+      const days = new Set(tasks.map(t => t.day)).size;
+      const keys = new Set(tasks.map(t => t.key));
+      const lost = state.workouts.tasks.filter(t => t.done && !keys.has(t.key)).length;
+      info.textContent = tasks.length
+        ? "Будет " + tasks.length + " " + plural(tasks.length, "задача", "задачи", "задач") + " на " + days + " " + plural(days, "день", "дня", "дней") + ". Уже отмеченные подходы останутся отмеченными."
+        : "Добавьте упражнение и повторы хотя бы в одном подходе.";
+      warn.textContent = lost ? "Будет удалено отмеченных подходов: " + lost + "." : "";
+    }
+
+    /* Вид A: список строк */
+    function renderA() {
+      tblArea.replaceChildren();
+      const tbody = el("tbody");
+      draft.rows.forEach((r, i) => {
+        const name = el("input", { type: "text", className: "field", value: r.name, placeholder: "Упражнение", maxLength: 60, attrs: { "aria-label": "Упражнение" } });
+        name.oninput = () => { r.name = name.value; updateInfo(); };
+        const day = el("input", { type: "number", className: "field", value: r.day || "", min: 1, max: MAX_DAYS, attrs: { "aria-label": "День" } });
+        day.oninput = () => { const v = clampInt(day.value, 1, MAX_DAYS); if (v) { r.day = v; updateInfo(); } };
+        day.onchange = () => { r.day = clampInt(day.value, 1, MAX_DAYS) || 1; day.value = r.day; updateInfo(); };
+        const tr = el("tr", null, el("td", null, name), el("td", { style: "width:78px" }, day));
+        for (let s = 0; s < MAX_SETS; s++) {
+          const inp = el("input", { type: "number", className: "field", value: r.sets[s] || "", min: 1, max: 99, attrs: { "aria-label": "Повторы, подход " + (s + 1) } });
+          inp.oninput = () => { r.sets[s] = clampInt(inp.value, 1, 99); updateInfo(); };
+          inp.onchange = () => { inp.value = r.sets[s] || ""; };
+          tr.append(el("td", { style: "width:74px" }, inp));
+        }
+        tr.append(el("td", { style: "width:40px" },
+          iconButton("trash", "Удалить строку", () => { draft.rows.splice(i, 1); if (!draft.rows.length) draft.rows.push({ name: "", day: 1, sets: [0, 0, 0, 0] }); renderTable(); }, "danger")));
+        tbody.append(tr);
+      });
+      const head = el("thead", null, el("tr", null,
+        el("th", { textContent: "Упражнение", style: "padding-left:12px" }), el("th", { textContent: "День" }),
+        el("th", { textContent: "Подход 1" }), el("th", { textContent: "Подход 2" }), el("th", { textContent: "Подход 3" }), el("th", { textContent: "Подход 4" }), el("th")));
+      tblArea.append(el("div", { className: "tbl-wrap" }, el("div", { className: "tbl-scroll" }, el("table", { className: "plan" }, head, tbody))));
+      tblArea.append(el("button", { type: "button", className: "btn btn-ghost btn-sm", style: "margin-top:12px",
+        onclick: () => { draft.rows.push({ name: "", day: 1, sets: [0, 0, 0, 0] }); renderTable(); } }, icon("plus"), "Добавить строку"));
+    }
+
+    /* Вид B: сетка 30 дней × 4 подхода по одному упражнению */
+    function exNames() {
+      const names = [];
+      draft.rows.forEach(r => { const n = r.name.trim(); if (n && !names.includes(n)) names.push(n); });
+      extra.forEach(n => { if (!names.includes(n)) names.push(n); });
+      return names;
+    }
+    const findRow = (name, day) => draft.rows.find(r => r.name.trim() === name && r.day === day);
+
+    function renderB() {
+      tblArea.replaceChildren();
+      const names = exNames();
+      if (!names.includes(selEx)) selEx = names[0] || "";
+      const bar = el("div", { className: "ex-bar" });
+      if (names.length) {
+        bar.append(el("div", { className: "seg", attrs: { role: "group", "aria-label": "Упражнение" } },
+          ...names.map(n => el("button", { type: "button", textContent: n, onclick: () => { selEx = n; renderB(); }, attrs: { "aria-pressed": String(n === selEx) } }))));
+      }
+      const newName = el("input", { type: "text", className: "field", placeholder: "Новое упражнение", maxLength: 60, attrs: { "aria-label": "Название нового упражнения" } });
+      const addNew = () => {
+        const n = newName.value.trim();
+        if (!n) return;
+        if (!extra.includes(n)) extra.push(n);
+        selEx = n;
+        renderB();
+      };
+      newName.onkeydown = e => { if (e.key === "Enter") { e.preventDefault(); addNew(); } };
+      bar.append(el("div", { className: "ex-add" }, newName, el("button", { type: "button", className: "btn btn-ghost btn-sm", onclick: addNew }, icon("plus"), "Добавить")));
+      tblArea.append(bar);
+      if (!selEx) { tblArea.append(el("p", { className: "hint", textContent: "Добавьте первое упражнение." })); updateInfo(); return; }
+
+      const tbody = el("tbody");
+      for (let d = 1; d <= MAX_DAYS; d++) {
+        const r = findRow(selEx, d);
+        const tr = el("tr", null, el("td", { className: "day-cell", textContent: "День " + d }));
+        for (let s = 0; s < MAX_SETS; s++) {
+          const inp = el("input", { type: "number", className: "field", value: r && r.sets[s] ? r.sets[s] : "", min: 1, max: 99, attrs: { "aria-label": "День " + d + ", подход " + (s + 1) } });
+          inp.oninput = () => {
+            let row = findRow(selEx, d);
+            if (!row) { row = { name: selEx, day: d, sets: [0, 0, 0, 0] }; draft.rows.push(row); }
+            row.sets[s] = clampInt(inp.value, 1, 99);
+            if (row.sets.every(x => !x)) draft.rows.splice(draft.rows.indexOf(row), 1);
+            updateInfo();
+          };
+          inp.onchange = () => { const rr = findRow(selEx, d); inp.value = rr && rr.sets[s] ? rr.sets[s] : ""; };
+          tr.append(el("td", null, inp));
+        }
+        tbody.append(tr);
+      }
+      const head = el("thead", null, el("tr", null, el("th", { textContent: selEx, style: "padding-left:12px" }),
+        el("th", { textContent: "Подход 1" }), el("th", { textContent: "Подход 2" }), el("th", { textContent: "Подход 3" }), el("th", { textContent: "Подход 4" })));
+      tblArea.append(el("div", { className: "tbl-wrap" }, el("div", { className: "tbl-scroll" }, el("table", { className: "plan" }, head, tbody))));
+      tblArea.append(el("button", { type: "button", className: "btn btn-ghost btn-sm", style: "margin-top:12px",
+        onclick: () => {
+          const base = findRow(selEx, 1);
+          if (!base) return;
+          for (let d = 2; d <= MAX_DAYS; d++) {
+            const ex = findRow(selEx, d);
+            if (ex) ex.sets = base.sets.slice(); else draft.rows.push({ name: selEx, day: d, sets: base.sets.slice() });
+          }
+          renderB();
+        } }, "Заполнить все 30 дней как день 1"));
+    }
+
+    function renderTable() {
+      if (mode === "A") renderA(); else renderB();
+      updateInfo();
+    }
+
+    const startInput = el("input", { type: "date", className: "field", id: "wd-start", value: draft.startDate });
+    trackToday(startInput);
+    startInput.addEventListener("change", () => { if (DATE_RE.test(startInput.value)) { draft.startDate = startInput.value; updateInfo(); } });
+    startInput.addEventListener("input", () => { if (DATE_RE.test(startInput.value)) { draft.startDate = startInput.value; updateInfo(); } });
+
+    const modeSeg = el("div", { className: "seg", style: "display:inline-flex;width:auto", attrs: { role: "group", "aria-label": "Вид таблицы" } });
+    [["A", "Список"], ["B", "Сетка по дням"]].forEach(([id, label]) => {
+      const b = el("button", { type: "button", textContent: label, style: "flex:none;padding:7px 14px", attrs: { "aria-pressed": String(mode === id) } });
+      b.onclick = () => {
+        mode = id;
+        modeSeg.querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b)));
+        renderTable();
+      };
+      modeSeg.append(b);
+    });
+
+    const clear = el("button", { type: "button", className: "btn btn-danger-ghost", textContent: "Очистить таблицу",
+      onclick: () => { draft.rows = [{ name: "", day: 1, sets: [0, 0, 0, 0] }]; extra = []; selEx = ""; renderTable(); } });
+    const cancel = el("button", { type: "button", className: "btn btn-ghost", textContent: "Отмена", onclick: () => dlg.close() });
+    const ok = el("button", { type: "submit", className: "btn btn-brand", textContent: "Сохранить и обновить чеклисты" });
+
+    form.replaceChildren(
+      el("h3", { className: "dlg-title", textContent: "Таблица тренировок" }),
+      el("p", { className: "dlg-msg", textContent: "Не больше 4 подходов в упражнении и 30 дней в плане. Пустая ячейка значит, что подхода нет." }),
+      el("div", { className: "wd-top" },
+        el("div", { className: "f" }, el("label", { className: "mini", htmlFor: "wd-start", textContent: "День 1 это" }), startInput),
+        modeSeg),
+      tblArea, info, warn,
+      el("div", { className: "dlg-actions" }, clear, cancel, ok)
+    );
+
+    form.onsubmit = e => {
+      e.preventDefault();
+      state.workouts.rows = cleanRows(draft.rows);
+      state.workouts.startDate = draft.startDate;
+      syncWorkouts();
+      commit();
+      dlg.close();
+    };
+    renderTable();
+    dlg.showModal();
+  }
+
+  /* ---------- Заметки ---------- */
+  async function openNote(note) {
+    const isNew = !note;
+    const v = await openDialog({
+      title: isNew ? "Новая заметка" : "Заметка",
+      wide: true,
+      submit: "Сохранить",
+      secondary: isNew ? null : { text: "Удалить", action: "delete" },
+      fields: [
+        { name: "title", label: "Заголовок", value: isNew ? "" : note.title, maxLength: 120 },
+        { name: "text", label: "Текст", type: "textarea", rows: 9, maxLength: 5000, value: isNew ? "" : note.text, placeholder: "Мысли, списки, ссылки…" },
+        { name: "pinned", label: "Закрепить вверху", type: "checkbox", value: isNew ? false : note.pinned }
+      ]
+    });
+    if (!v) return;
+    if (v.__action === "delete") {
+      state.notes = state.notes.filter(n => n.id !== note.id);
+      commit();
+      return;
+    }
+    if (!v.title && !v.text) return; // пустую заметку не создаём
+    if (isNew) {
+      state.notes.push({ id: uid(), title: v.title, text: v.text, pinned: v.pinned, updated: Date.now() });
+    } else {
+      note.title = v.title; note.text = v.text; note.pinned = v.pinned; note.updated = Date.now();
+    }
+    commit();
+  }
+
+  function renderNotes() {
+    const box = $("notes");
+    box.replaceChildren();
+    const q = $("note-search").value.trim().toLowerCase();
+    const list = state.notes
+      .filter(n => !q || (n.title + " " + n.text).toLowerCase().includes(q))
+      .sort((a, b) => (b.pinned - a.pinned) || (b.updated - a.updated));
+    if (!list.length) {
+      box.append(el("div", { className: "empty", style: "margin-top:0" },
+        el("strong", { textContent: state.notes.length ? "Ничего не найдено" : "Пока нет заметок" }),
+        state.notes.length ? "Попробуйте другой запрос." : "Нажмите «Новая», чтобы записать мысль или список."));
+      return;
+    }
+    list.forEach(n => {
+      const card = el("article", { className: "note", tabIndex: 0, attrs: { role: "button" } },
+        el("h3", null, el("span", { textContent: n.title || "Без названия" }), n.pinned ? el("span", { className: "pin", textContent: "закреплена" }) : null),
+        n.text ? el("p", { textContent: n.text }) : null,
+        el("div", { className: "meta", textContent: new Date(n.updated).toLocaleDateString("ru-RU", { day: "numeric", month: "short" }) }));
+      card.onclick = () => openNote(n);
+      card.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openNote(n); } };
+      box.append(card);
+    });
+  }
+
+  /* ---------- Общая отрисовка и запуск ---------- */
+  function render() {
+    lastToday = todayStr();
+    renderSummary();
+    renderTasksColumn();
+    renderWorkouts();
+    renderNotes();
+  }
+
+  $("section-submit").append(icon("plus"), "Раздел");
+  $("section-submit").setAttribute("aria-label", "Добавить раздел");
+  $("note-new").append(icon("plus"), "Новая");
+  $("note-new").onclick = () => openNote(null);
+  $("note-search").addEventListener("input", renderNotes);
+
+  $("section-form").onsubmit = e => {
     e.preventDefault();
-    const input = document.getElementById("section-input");
+    const input = $("section-input");
     const title = input.value.trim();
     if (!title) return;
     state.sections.push({ id: uid(), title: title, tasks: [] });
