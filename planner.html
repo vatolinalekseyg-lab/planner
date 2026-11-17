@@ -79,6 +79,7 @@
   }
   .site-header .nav-link { color: var(--muted); font-weight: 500; border-radius: 8px; transition: color .15s ease, background .15s ease; }
   .site-header .nav-link:hover { color: var(--ink); background: var(--glass); }
+  .hdr-right { display: inline-flex; align-items: center; gap: 8px; }
   .brand { font-weight: 800; letter-spacing: -0.01em; color: var(--ink); text-decoration: none; }
   .brand::before {
     content: ""; display: inline-block; width: 10px; height: 10px; margin-right: 8px; border-radius: 50%;
@@ -161,8 +162,6 @@
   .summary { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 24px; min-height: 28px; }
   .sum-text { color: var(--muted); font-weight: 500; margin-right: 4px; }
 
-  .cols { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 22px; align-items: start; }
-  @media (max-width: 1100px) { .cols { grid-template-columns: minmax(0, 1fr); gap: 34px; } }
   .col-head { display: flex; align-items: center; gap: 10px; min-height: 40px; margin-bottom: 12px; }
   .col-title { flex: 1; margin: 0; font-size: 1.3rem; font-weight: 800; letter-spacing: -0.01em; }
   .col-count { color: var(--muted); font-size: .85rem; font-weight: 600; }
@@ -214,12 +213,14 @@
 
   .tasks { list-style: none; margin: 0; padding: 0; }
   .task-row {
-    display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px;
+    display: flex; align-items: flex-start; gap: 6px 10px;
     padding: 10px 0; border-bottom: 1px solid var(--line);
   }
+  .task-row .check { margin-top: 3px; }
+  .task-meta { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
   .task-row:last-child { border-bottom: 0; }
   .check { width: 20px; height: 20px; margin: 0; flex-shrink: 0; accent-color: var(--brand-1); cursor: pointer; }
-  .task-main { flex: 1 1 150px; min-width: 0; }
+  .task-main { flex: 1 1 0; min-width: 0; }
   .task-title {
     display: block; max-width: 100%; padding: 0; margin: 0; border: 0; background: none;
     font: inherit; color: var(--ink); text-align: left; cursor: pointer; overflow-wrap: anywhere;
@@ -298,6 +299,46 @@
   .pin { color: var(--brand-1); font-size: .72rem; font-weight: 800; white-space: nowrap; }
   [data-bs-theme="dark"] .pin { color: #9fd3c4; }
 
+  /* ---------- Макет «Сегодня»: боковое меню и экраны ---------- */
+  [hidden] { display: none !important; }
+  .app-grid { display: grid; grid-template-columns: 224px minmax(0, 1fr); gap: 28px; align-items: start; }
+  .side {
+    position: sticky; top: 92px; display: grid; gap: 4px; padding: 10px;
+    background: var(--glass); border: 1px solid var(--line); border-radius: 18px;
+    backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  }
+  .side a {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 10px 12px;
+    color: var(--muted); font-weight: 600; text-decoration: none; white-space: nowrap; border-radius: 10px;
+    transition: color .15s ease, background .15s ease;
+  }
+  .side a:hover { color: var(--ink); background: var(--glass-strong); }
+  .side a:focus-visible { outline: 2px solid var(--brand-2); outline-offset: 2px; }
+  .side a.on { color: #fff; background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); box-shadow: 0 8px 18px -10px rgba(63, 122, 124, 0.8); }
+  .side .n { font-size: .8rem; opacity: .85; }
+  .main-col { min-width: 0; }
+  .page-sub { margin: -2px 0 18px; color: var(--muted); font-weight: 600; }
+  .page-sub:empty { display: none; }
+  .page-sub::first-letter { text-transform: uppercase; }
+  .two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 18px; align-items: start; }
+  .stack { display: grid; gap: 18px; min-width: 0; }
+  .pane .section-card { margin-top: 0; }
+  .sections-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 18px; align-items: start; }
+  .sections-grid .empty { grid-column: 1 / -1; margin-top: 0; }
+  .filter-bar { margin-bottom: 18px; }
+  .filter-bar .seg { max-width: 460px; }
+  .pane-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .pane-tools .field { flex: 1; min-width: 180px; }
+  .notes-list { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+  .notes-list .empty { grid-column: 1 / -1; }
+  .sec-tag { margin-top: 1px; color: var(--muted); font-size: .78rem; font-weight: 700; }
+  @media (max-width: 900px) {
+    .app-grid { grid-template-columns: minmax(0, 1fr); gap: 18px; }
+    .side { position: static; grid-auto-flow: column; grid-auto-columns: max-content; overflow-x: auto; }
+    .two { grid-template-columns: minmax(0, 1fr); }
+    .sections-grid { grid-template-columns: minmax(0, 1fr); }
+  }
+
   /* ---------- Диалоги ---------- */
   dialog {
     width: min(440px, calc(100vw - 32px)); max-height: calc(100vh - 32px); overflow: auto; padding: 0; color: var(--ink);
@@ -341,9 +382,11 @@
   .wd-warn:empty, .wd-info:empty { display: none; }
 </style>
 <script>
-  // Тема под настройки системы (светлая/тёмная)
+  // Тема: сохранённый выбор, а если его нет, то настройка системы
   (function () {
-    var dark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+    var saved = null;
+    try { saved = localStorage.getItem("planner-theme"); } catch (e) {}
+    var dark = saved ? saved === "dark" : !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches);
     document.documentElement.setAttribute("data-bs-theme", dark ? "dark" : "light");
   })();
 </script>
@@ -364,7 +407,10 @@
         <a class="brand fs-5" href="index.html">Планировщик</a>
       </div>
       <div class="col-6 col-lg-4 text-end">
-        <a class="btn btn-ghost" href="#">Войти</a>
+        <div class="hdr-right">
+          <button class="icon-btn" type="button" id="theme-btn"></button>
+          <a class="btn btn-ghost" href="#">Войти</a>
+        </div>
       </div>
     </div>
   </div>
@@ -372,39 +418,64 @@
 
 <main class="flex-grow-1">
   <div class="container planner-wrap">
-    <h1 class="page-title">Мой планировщик</h1>
-    <div class="summary" id="summary"></div>
+    <div class="app-grid">
+      <aside class="side" aria-label="Экраны планировщика">
+        <a href="#today" data-view="today">Сегодня <span class="n" id="n-today"></span></a>
+        <a href="#tasks" data-view="tasks">Задачи <span class="n" id="n-tasks"></span></a>
+        <a href="#workouts" data-view="workouts">Тренировки <span class="n" id="n-workouts"></span></a>
+        <a href="#notes" data-view="notes">Заметки <span class="n" id="n-notes"></span></a>
+      </aside>
 
-    <div class="cols">
+      <div class="main-col">
+        <h1 class="page-title" id="page-title">Сегодня</h1>
+        <p class="page-sub" id="page-sub"></p>
 
-      <!-- Колонка 1: задачи -->
-      <section class="col-tasks" aria-labelledby="h-tasks">
-        <div class="col-head"><h2 class="col-title" id="h-tasks">Задачи</h2><span class="col-count" id="tasks-count"></span></div>
-        <form id="section-form" class="section-add">
-          <input class="field" type="text" id="section-input" maxlength="80" required
-                 placeholder="Новый раздел, например «Работа»" aria-label="Название нового раздела">
-          <button class="btn btn-brand" type="submit" id="section-submit"></button>
-        </form>
-        <div class="filter-bar" id="filter"></div>
-        <div id="sections"></div>
-      </section>
+        <!-- Экран «Сегодня» -->
+        <section class="pane" id="view-today" aria-label="Сегодня">
+          <div class="summary" id="summary"></div>
+          <div class="two">
+            <div class="stack">
+              <section class="section-card">
+                <div class="sec-head"><h2 class="sec-title">Задачи на сегодня</h2></div>
+                <div id="today-tasks"></div>
+                <div id="today-add"></div>
+              </section>
+              <section class="section-card">
+                <div class="sec-head"><h2 class="sec-title">Закреплённые заметки</h2></div>
+                <div class="notes-list" id="today-notes"></div>
+              </section>
+            </div>
+            <div class="stack">
+              <section class="section-card" id="today-workout"></section>
+            </div>
+          </div>
+        </section>
 
-      <!-- Колонка 2: тренировки -->
-      <section class="col-workouts" aria-labelledby="h-workouts">
-        <div class="col-head"><h2 class="col-title" id="h-workouts">Тренировки</h2></div>
-        <div id="workouts"></div>
-      </section>
+        <!-- Экран «Задачи» -->
+        <section class="pane" id="view-tasks" aria-label="Задачи" hidden>
+          <form id="section-form" class="section-add">
+            <input class="field" type="text" id="section-input" maxlength="80" required
+                   placeholder="Новый раздел, например «Работа»" aria-label="Название нового раздела">
+            <button class="btn btn-brand" type="submit" id="section-submit"></button>
+          </form>
+          <div class="filter-bar" id="filter"></div>
+          <div id="sections" class="sections-grid"></div>
+        </section>
 
-      <!-- Колонка 3: заметки -->
-      <section class="col-notes" aria-labelledby="h-notes">
-        <div class="col-head">
-          <h2 class="col-title" id="h-notes">Заметки</h2>
-          <button class="btn btn-ghost btn-sm" type="button" id="note-new"></button>
-        </div>
-        <input class="field" type="search" id="note-search" placeholder="Поиск по заметкам" aria-label="Поиск по заметкам">
-        <div class="notes-list" id="notes"></div>
-      </section>
+        <!-- Экран «Тренировки» -->
+        <section class="pane" id="view-workouts" aria-label="Тренировки" hidden>
+          <div id="workouts" class="two"></div>
+        </section>
 
+        <!-- Экран «Заметки» -->
+        <section class="pane" id="view-notes" aria-label="Заметки" hidden>
+          <div class="pane-tools">
+            <input class="field" type="search" id="note-search" placeholder="Поиск по заметкам" aria-label="Поиск по заметкам">
+            <button class="btn btn-brand btn-sm" type="button" id="note-new"></button>
+          </div>
+          <div class="notes-list" id="notes"></div>
+        </section>
+      </div>
     </div>
   </div>
 </main>
@@ -439,7 +510,9 @@
     cal:   '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/>',
     plus:  '<path d="M12 5v14M5 12h14"/>',
     note:  '<path d="M5 4h14v16H5z"/><path d="M9 9h6M9 13h6"/>',
-    grid:  '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/>'
+    grid:  '<rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/>',
+    moon:  '<path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/>',
+    sun:   '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>'
   };
 
   const $ = id => document.getElementById(id);
@@ -751,7 +824,7 @@
     ));
   }
 
-  function renderTask(sec, task) {
+  function renderTask(sec, task, opts) {
     const checkbox = el("input", { type: "checkbox", className: "check", checked: task.done,
       attrs: { "aria-label": "Выполнена: " + task.text } });
     checkbox.onchange = () => { task.done = checkbox.checked; commit(); };
@@ -760,17 +833,17 @@
       el("button", { type: "button", className: "task-title", textContent: task.text, title: "Открыть карточку",
         onclick: () => openTask(sec, task) })
     );
+    if (opts && opts.section) main.append(el("div", { className: "sec-tag", textContent: sec.title }));
     if (task.description) {
       main.append(el("div", { className: "task-desc" }, icon("note"), el("span", { textContent: task.description })));
     }
 
-    const row = el("li", { className: "task-row" + (task.done ? " done" : "") },
-      checkbox,
-      main,
-      el("span", { className: "prio prio-" + task.priority, textContent: PRIO_LABEL[task.priority] })
-    );
+    const meta = el("div", { className: "task-meta" },
+      el("span", { className: "prio prio-" + task.priority, textContent: PRIO_LABEL[task.priority] }));
+    if (task.deadline) meta.append(dueChip(task.deadline, task.done));
+    main.append(meta);
 
-    if (task.deadline) row.append(dueChip(task.deadline, task.done));
+    const row = el("li", { className: "task-row" + (task.done ? " done" : "") }, checkbox, main);
 
     row.append(el("div", { className: "task-actions" },
       iconButton("edit", "Открыть карточку", () => openTask(sec, task)),
@@ -848,7 +921,6 @@
   function renderTasksColumn() {
     renderFilter();
     const all = state.sections.flatMap(s => s.tasks);
-    $("tasks-count").textContent = all.length ? all.filter(t => t.done).length + " из " + all.length : "";
     const root = $("sections");
     root.replaceChildren();
     if (!state.sections.length) {
@@ -921,6 +993,12 @@
     return g ? g.day : null;
   }
 
+  function workoutRow(t) {
+    const cb = el("input", { type: "checkbox", className: "check", checked: t.done, attrs: { "aria-label": "Выполнено: " + t.text } });
+    cb.onchange = () => { t.done = cb.checked; commit(); };
+    return el("li", { className: "task-row" + (t.done ? " done" : "") }, cb, el("div", { className: "task-main task-text", textContent: t.text }));
+  }
+
   function renderWorkouts() {
     const box = $("workouts");
     box.replaceChildren();
@@ -964,11 +1042,7 @@
         el("span", { className: "day-count", textContent: gDone + " из " + g.tasks.length }));
       sum.addEventListener("click", () => { openDays[g.day] = !det.open; });
       const ul = el("ul", { className: "tasks" });
-      g.tasks.forEach(t => {
-        const cb = el("input", { type: "checkbox", className: "check", checked: t.done, attrs: { "aria-label": "Выполнено: " + t.text } });
-        cb.onchange = () => { t.done = cb.checked; commit(); };
-        ul.append(el("li", { className: "task-row" + (t.done ? " done" : "") }, cb, el("div", { className: "task-main task-text", textContent: t.text })));
-      });
+      g.tasks.forEach(t => ul.append(workoutRow(t)));
       det.append(sum, ul);
       card.append(det);
     });
@@ -1173,6 +1247,16 @@
     commit();
   }
 
+  function noteCard(n) {
+    const card = el("article", { className: "note", tabIndex: 0, attrs: { role: "button" } },
+      el("h3", null, el("span", { textContent: n.title || "Без названия" }), n.pinned ? el("span", { className: "pin", textContent: "закреплена" }) : null),
+      n.text ? el("p", { textContent: n.text }) : null,
+      el("div", { className: "meta", textContent: new Date(n.updated).toLocaleDateString("ru-RU", { day: "numeric", month: "short" }) }));
+    card.onclick = () => openNote(n);
+    card.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openNote(n); } };
+    return card;
+  }
+
   function renderNotes() {
     const box = $("notes");
     box.replaceChildren();
@@ -1186,21 +1270,138 @@
         state.notes.length ? "Попробуйте другой запрос." : "Нажмите «Новая», чтобы записать мысль или список."));
       return;
     }
-    list.forEach(n => {
-      const card = el("article", { className: "note", tabIndex: 0, attrs: { role: "button" } },
-        el("h3", null, el("span", { textContent: n.title || "Без названия" }), n.pinned ? el("span", { className: "pin", textContent: "закреплена" }) : null),
-        n.text ? el("p", { textContent: n.text }) : null,
-        el("div", { className: "meta", textContent: new Date(n.updated).toLocaleDateString("ru-RU", { day: "numeric", month: "short" }) }));
-      card.onclick = () => openNote(n);
-      card.onkeydown = e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openNote(n); } };
-      box.append(card);
+    list.forEach(n => box.append(noteCard(n)));
+  }
+
+  /* ---------- Экраны и «Сегодня» ---------- */
+  const VIEWS = { today: "Сегодня", tasks: "Задачи", workouts: "Тренировки", notes: "Заметки" };
+  const PRIO_ORDER = { critical: 0, high: 1, medium: 2, low: 3 };
+  let todaySecId = "";
+
+  function currentView() {
+    const h = location.hash.replace("#", "");
+    return VIEWS[h] ? h : "today";
+  }
+
+  function applyView() {
+    const v = currentView();
+    Object.keys(VIEWS).forEach(id => { $("view-" + id).hidden = id !== v; });
+    document.querySelectorAll(".side a").forEach(a => {
+      const on = a.dataset.view === v;
+      a.classList.toggle("on", on);
+      if (on) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current");
     });
+    $("page-title").textContent = VIEWS[v];
+    $("page-sub").textContent = v === "today"
+      ? new Date().toLocaleDateString("ru-RU", { weekday: "long", day: "numeric", month: "long" })
+      : "";
+  }
+
+  // Задачи со сроком сегодня или раньше; выполненные просроченные скрыты
+  function todayTasks() {
+    const today = todayStr();
+    const out = [];
+    state.sections.forEach(sec => sec.tasks.forEach(task => {
+      if (!task.deadline || task.deadline > today) return;
+      if (task.done && task.deadline < today) return;
+      out.push({ sec: sec, task: task });
+    }));
+    return out.sort((a, b) =>
+      (a.task.done - b.task.done) ||
+      a.task.deadline.localeCompare(b.task.deadline) ||
+      PRIO_ORDER[a.task.priority] - PRIO_ORDER[b.task.priority]);
+  }
+
+  function renderSide() {
+    const today = todayStr();
+    const all = state.sections.flatMap(s => s.tasks);
+    const todayLeft = todayTasks().filter(x => !x.task.done).length
+      + state.workouts.tasks.filter(t => t.date === today && !t.done).length;
+    $("n-today").textContent = todayLeft || "";
+    $("n-tasks").textContent = all.filter(t => !t.done).length || "";
+    $("n-workouts").textContent = state.workouts.tasks.filter(t => !t.done).length || "";
+    $("n-notes").textContent = state.notes.length || "";
+  }
+
+  function renderTodayAdd() {
+    const box = $("today-add");
+    box.replaceChildren();
+    if (!state.sections.length) {
+      box.append(el("p", { className: "hint" }, "Чтобы добавлять задачи, создайте раздел на экране ",
+        el("a", { href: "#tasks", textContent: "«Задачи»" }), "."));
+      return;
+    }
+    if (!state.sections.some(s => s.id === todaySecId)) todaySecId = state.sections[0].id;
+    const text = el("input", { type: "text", className: "field", id: "today-add-text", required: true, maxLength: 200,
+      placeholder: "Что нужно сделать сегодня?", attrs: { "aria-label": "Новая задача на сегодня" } });
+    const sel = el("select", { className: "field", id: "today-add-sec", attrs: { "aria-label": "Раздел" } },
+      ...state.sections.map(s => el("option", { value: s.id, textContent: s.title })));
+    sel.value = todaySecId;
+    sel.onchange = () => { todaySecId = sel.value; };
+    const form = el("form", { className: "add-form" },
+      el("div", { className: "f-text" }, text),
+      el("div", { className: "f-text" }, el("label", { className: "mini", htmlFor: "today-add-sec", textContent: "Раздел" }), sel),
+      el("button", { type: "submit", className: "btn btn-brand" }, icon("plus"), "Добавить на сегодня"));
+    form.onsubmit = e => {
+      e.preventDefault();
+      const value = text.value.trim();
+      const sec = state.sections.find(s => s.id === sel.value);
+      if (!value || !sec) return;
+      todaySecId = sec.id;
+      sec.tasks.push({ id: uid(), text: value, done: false, deadline: todayStr(), priority: "medium", description: "" });
+      commit();
+    };
+    box.append(form);
+  }
+
+  function renderTodayWorkout() {
+    const box = $("today-workout");
+    box.replaceChildren();
+    const today = todayStr();
+    const all = state.workouts.tasks;
+    const wt = all.filter(t => t.date === today);
+    const done = wt.filter(t => t.done).length;
+    box.append(el("div", { className: "sec-head" },
+      el("h2", { className: "sec-title", textContent: wt.length ? "Тренировка · день " + wt[0].day : "Тренировка" }),
+      el("span", { className: "sec-count", textContent: wt.length ? done + " из " + wt.length : "" })));
+    if (wt.length) {
+      box.append(el("div", { className: "bar", attrs: { "aria-hidden": "true" } },
+        el("span", { style: "width:" + Math.round(done / wt.length * 100) + "%" })));
+      box.append(el("ul", { className: "tasks" }, ...wt.map(workoutRow)));
+      return;
+    }
+    const next = all.filter(t => t.date > today).sort((a, b) => a.date.localeCompare(b.date))[0];
+    box.append(el("p", { className: "no-tasks", textContent: !all.length
+      ? "План тренировок пока пуст."
+      : next ? "Сегодня тренировки нет. Ближайшая: день " + next.day + ", " + shortDate(next.date) + "."
+             : "Сегодня тренировки нет, все дни плана позади." }));
+    box.append(el("a", { className: "btn btn-ghost btn-sm", href: "#workouts", style: "margin-top:14px" },
+      icon("grid"), all.length ? "Открыть тренировки" : "Составить план"));
+  }
+
+  function renderToday() {
+    const items = todayTasks();
+    const box = $("today-tasks");
+    box.replaceChildren();
+    if (items.length) box.append(el("ul", { className: "tasks" }, ...items.map(x => renderTask(x.sec, x.task, { section: true }))));
+    else box.append(el("p", { className: "no-tasks", textContent: "На сегодня задач со сроком нет." }));
+    renderTodayAdd();
+
+    const pinned = state.notes.filter(n => n.pinned).sort((a, b) => b.updated - a.updated);
+    const nb = $("today-notes");
+    nb.replaceChildren();
+    if (pinned.length) pinned.forEach(n => nb.append(noteCard(n)));
+    else nb.append(el("p", { className: "no-tasks", textContent: "Закрепите заметку в её карточке, и она появится здесь." }));
+
+    renderTodayWorkout();
   }
 
   /* ---------- Общая отрисовка и запуск ---------- */
   function render() {
     lastToday = todayStr();
+    renderSide();
     renderSummary();
+    renderToday();
     renderTasksColumn();
     renderWorkouts();
     renderNotes();
@@ -1227,6 +1428,25 @@
     if (!document.hidden && todayStr() !== lastToday) render();
   });
 
+  /* ---------- Переключатель темы ---------- */
+  function paintThemeButton() {
+    const dark = document.documentElement.getAttribute("data-bs-theme") === "dark";
+    const btn = $("theme-btn");
+    btn.replaceChildren(icon(dark ? "sun" : "moon"));
+    const label = dark ? "Включить светлую тему" : "Включить тёмную тему";
+    btn.title = label;
+    btn.setAttribute("aria-label", label);
+  }
+  $("theme-btn").onclick = () => {
+    const next = document.documentElement.getAttribute("data-bs-theme") === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-bs-theme", next);
+    try { localStorage.setItem("planner-theme", next); } catch (e) {}
+    paintThemeButton();
+  };
+  paintThemeButton();
+
+  window.addEventListener("hashchange", applyView);
+  applyView();
   render();
 </script>
 </body>
